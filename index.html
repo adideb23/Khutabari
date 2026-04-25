@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Reading Entry</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+
+        .dashboard-card { 
+            background: #ffffff; 
+            width: 90%; 
+            max-width: 400px; 
+            padding: 40px 25px; 
+            border-radius: 24px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            text-align: center; 
+        }
+
+        h1 { 
+            color: #2c3e50; 
+            font-size: 26px; /* Heading thoda bada kiya hai */
+            margin-bottom: 30px; 
+            border-bottom: 3px solid #f1c40f; /* Electricity ke liye yellow underline */
+            display: inline-block;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn { 
+            display: block; 
+            text-decoration: none; 
+            color: white; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            border-radius: 15px; 
+            font-size: 20px; 
+            font-weight: 700; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+
+        .btn-reading { 
+            background: linear-gradient(to right, #673ab7, #512da8);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(103, 58, 183, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn:active { 
+            transform: scale(0.96); 
+        }
+
+        .footer { 
+            margin-top: 25px; 
+            color: #7f8c8d; 
+            font-size: 14px; 
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .contact-link {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-card">
+        <h1>Electricity</h1>
+        
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" 
+           target="_blank" class="btn btn-reading">
+            📝 Enter Reading
+        </a>
+
+        <div class="footer">
+            Made by Adidev Boro <br>
+            <a href="tel:7086187975" class="contact-link">
+                📞 7086187975
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
