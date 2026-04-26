@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Khutabari Portal, Khutabari Rent, Adidev Khutabari, Adidev portal, Khutabari electricity Portal, Electricity, Meter Reading, Adidev Boro, Khutabari, adideb23, Adidev Boro Khutabari">
-<meta name="description" content="Official Khutabari Electricity Reading Entry portal and project dashboard by Adidev Boro.">
+    <meta name="description" content="Official Khutabari Electricity Reading Entry portal and project dashboard by Adidev Boro.">
     <title>KHUTABARI Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -16,7 +16,7 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            overflow: hidden; /* Screen scroll na ho */
+            overflow: hidden; 
         }
 
         .dashboard-card { 
@@ -29,10 +29,9 @@
             text-align: center;
             position: relative;
             min-height: 320px;
-            overflow: hidden; /* Sabse Important: Taki side menu bahar na dikhe */
+            overflow: hidden; 
         }
 
-        /* Top Left Home Icon */
         .home-icon-btn {
             position: absolute;
             top: 20px;
@@ -43,7 +42,6 @@
             z-index: 10;
         }
 
-        /* Side Arrow Trigger */
         .menu-arrow {
             position: absolute;
             left: 0;
@@ -58,7 +56,6 @@
             transition: 0.3s;
         }
 
-        /* Sliding Overlay Menu - Updated for Desktop Fix */
         .side-menu {
             position: absolute;
             top: 0;
@@ -74,16 +71,49 @@
             padding: 20px;
             box-sizing: border-box;
             z-index: 9;
-            /* Transform use kiya hai taki desktop pe hide rahe */
             transform: translateX(-100%); 
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .side-menu.active {
-            transform: translateX(0); /* Slide in */
+        .side-menu.active { transform: translateX(0); }
+
+        /* Bill Modal Styling */
+        .bill-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 11;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* Buttons Styling */
+        .search-input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            width: 80%;
+            margin-bottom: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .bill-details {
+            width: 85%;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid #2196F3;
+            margin-top: 15px;
+        }
+
         .btn { 
             display: block; 
             text-decoration: none; 
@@ -95,11 +125,13 @@
             font-weight: 700; 
             width: 85%;
             border: none;
+            cursor: pointer;
         }
         .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
         .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
+        .btn-search { background: #2c3e50; padding: 12px; width: 50%; font-size: 16px; margin-bottom: 10px; }
         
-        .close-menu {
+        .close-menu, .close-bill {
             margin-top: 15px;
             color: #e74c3c;
             font-weight: bold;
@@ -107,7 +139,6 @@
             text-transform: uppercase;
         }
 
-        /* Home Content */
         #clock-display {
             font-size: 18px;
             color: #d35400;
@@ -118,34 +149,15 @@
             margin-bottom: 20px;
         }
 
-        .signature {
-            margin-top: 10px;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-
-        .project-name {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #2c3e50;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        .call-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        .signature { margin-top: 10px; border-top: 1px solid #eee; padding-top: 15px; }
+        .project-name { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #2c3e50; display: block; text-transform: uppercase; }
+        .call-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="dashboard-card">
-        <i class="fas fa-home home-icon-btn" onclick="closeMenu()"></i>
+        <i class="fas fa-home home-icon-btn" onclick="closeAll()"></i>
 
         <div class="menu-arrow" onclick="toggleMenu()">
             <i class="fas fa-chevron-right"></i>
@@ -168,8 +180,26 @@
         <div id="side-panel" class="side-menu">
             <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" target="_blank" class="btn btn-reading">📝 Enter Reading</a>
-            <a href="https://docs.google.com/spreadsheets/d/1dql8aleIyNBnqlfsFUiEO7QXpIBJVJHCpmCU1nNhfD4/preview" target="_blank" class="btn btn-view">📄 View Bill</a>
+            <button onclick="openBill()" class="btn btn-view">📄 View Bill</button>
             <div class="close-menu" onclick="closeMenu()">✖ Close Menu</div>
+        </div>
+
+        <div id="bill-modal" class="bill-overlay">
+            <h2 style="color: #2c3e50; margin-bottom: 10px;">Check Bill</h2>
+            
+            <input type="text" id="cust-id-input" class="search-input" placeholder="Enter Unique ID">
+            <button onclick="fetchCustomerBill()" class="btn btn-search">Search</button>
+
+            <div id="bill-result-box" class="bill-details" style="display: none;">
+                <p><strong>Name:</strong> <span id="res-name"></span></p>
+                <p><strong>Rent:</strong> ₹<span id="res-rent"></span></p>
+                <p><strong>E-Bill:</strong> ₹<span id="res-bill"></span></p>
+                <p><strong>Month:</strong> <span id="res-date"></span></p>
+            </div>
+            
+            <p id="error-text" style="color: red; display: none; font-size: 14px; margin-top: 10px;">Invalid ID! Please try again.</p>
+
+            <div class="close-bill" onclick="closeBill()">✖ Back</div>
         </div>
     </div>
 
@@ -180,6 +210,56 @@
         function closeMenu() {
             document.getElementById('side-panel').classList.remove('active');
         }
+        function closeAll() {
+            closeMenu();
+            closeBill();
+        }
+
+        // Bill Logic
+        function openBill() {
+            document.getElementById('bill-modal').style.display = 'flex';
+        }
+        
+        function closeBill() {
+            document.getElementById('bill-modal').style.display = 'none';
+            document.getElementById('cust-id-input').value = '';
+            document.getElementById('bill-result-box').style.display = 'none';
+            document.getElementById('error-text').style.display = 'none';
+        }
+
+        async function fetchCustomerBill() {
+            const searchId = document.getElementById('cust-id-input').value.trim();
+            const resultBox = document.getElementById('bill-result-box');
+            const errorText = document.getElementById('error-text');
+
+            if (!searchId) return;
+
+            try {
+                const response = await fetch('data.json');
+                const users = await response.json();
+                
+                // Find user by ID
+                const user = users.find(u => u.id === searchId);
+
+                if (user) {
+                    // Mapping JSON keys: customer_name, Rent, E_Bill, Billed_Month
+                    document.getElementById('res-name').innerText = user.customer_name;
+                    document.getElementById('res-rent').innerText = user.Rent;
+                    document.getElementById('res-bill').innerText = user.E_Bill;
+                    document.getElementById('res-date').innerText = user.Billed_Month;
+                    
+                    resultBox.style.display = 'block';
+                    errorText.style.display = 'none';
+                } else {
+                    resultBox.style.display = 'none';
+                    errorText.style.display = 'block';
+                }
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                alert("data.json file not found or empty!");
+            }
+        }
+
         function updateTime() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
