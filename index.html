@@ -26,7 +26,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
             text-align: center;
             position: relative;
-            min-height: 300px;
+            min-height: 320px;
         }
 
         /* Top Left Home Icon */
@@ -93,7 +93,6 @@
             width: 85%;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
         .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
@@ -119,10 +118,9 @@
             padding: 15px;
             border-radius: 12px;
             line-height: 1.5;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Footer inside Clock Section */
         .signature {
             margin-top: 10px;
             border-top: 1px solid #eee;
@@ -130,9 +128,9 @@
         }
 
         .author-name {
-            font-size: 16px;
-            color: #34495e;
-            font-weight: 600;
+            font-size: 15px;
+            color: #7f8c8d;
+            font-weight: 500;
             display: block;
         }
 
@@ -140,10 +138,28 @@
             font-size: 20px;
             color: #2c3e50;
             font-weight: 800;
-            letter-spacing: 3px;
-            margin-top: 5px;
+            letter-spacing: 2px;
+            margin-top: 2px;
             display: block;
             text-transform: uppercase;
+        }
+
+        /* Call Styling */
+        .call-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .call-link i {
+            margin-right: 8px;
+            color: #27ae60;
+        }
+        .call-link:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -165,6 +181,10 @@
             <div class="signature">
                 <span class="author-name">Made By Adidev Boro</span>
                 <span class="project-name">KHUTABARI</span>
+                
+                <a href="tel:7086187975" class="call-link">
+                    <i class="fas fa-phone-alt"></i> 7086187975
+                </a>
             </div>
         </div>
 
