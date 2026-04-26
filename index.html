@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Electricity, Meter Reading, Adidev Boro, Khutabari, adideb23, Adidev Khutabari, Khutabari Electricity, Adidev Boro Khutabari">
-    <meta name="description" content="Electricity Reading Entry portal and Khutabari project by Adidev Boro.">
-    
-    <title>KHUTABARI Reading Entry</title>
+    <title>KHUTABARI Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
@@ -16,101 +14,198 @@
             align-items: center; 
             height: 100vh; 
             margin: 0; 
+            overflow: hidden;
         }
 
         .dashboard-card { 
             background: #ffffff; 
             width: 90%; 
             max-width: 400px; 
-            padding: 40px 25px; 
+            padding: 50px 25px; 
             border-radius: 24px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
-            text-align: center; 
+            text-align: center;
+            position: relative;
+            min-height: 300px;
         }
 
-        h1 { 
-            color: #2c3e50; 
-            font-size: 26px; 
-            margin-bottom: 30px; 
-            border-bottom: 3px solid #f1c40f; 
-            display: inline-block;
-            padding-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        /* Top Left Home Icon */
+        .home-icon-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #27ae60;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s;
+        }
+        .home-icon-btn:hover { transform: scale(1.2); }
+
+        /* Side Arrow Trigger */
+        .menu-arrow {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 15px 8px;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
+        /* Sliding Overlay Menu */
+        .side-menu {
+            position: absolute;
+            top: 0;
+            left: -105%; 
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+        }
+
+        .side-menu.active {
+            left: 0; 
+        }
+
+        /* Buttons Styling */
         .btn { 
             display: block; 
             text-decoration: none; 
             color: white; 
-            padding: 20px; 
+            padding: 18px; 
             margin-bottom: 15px; 
             border-radius: 15px; 
-            font-size: 20px; 
+            font-size: 18px; 
             font-weight: 700; 
-            transition: all 0.2s ease; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            width: 85%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
+        .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
+        
+        .close-menu {
+            margin-top: 15px;
+            color: #e74c3c;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
-        /* Reading Button - Purple */
-        .btn-reading { 
-            background: linear-gradient(to right, #673ab7, #512da8);
+        /* Home Content */
+        .welcome-text { font-size: 28px; color: #2c3e50; font-weight: bold; margin-bottom: 5px; }
+        .sub-text { font-size: 18px; color: #7f8c8d; margin-bottom: 20px; }
+        
+        #clock-display {
+            font-size: 18px;
+            color: #d35400;
+            font-weight: bold;
+            background: #fff5e6;
+            padding: 15px;
+            border-radius: 12px;
+            line-height: 1.5;
+            margin-bottom: 25px;
         }
 
-        /* View Bill Button - Blue/Cyan */
-        .btn-view { 
-            background: linear-gradient(to right, #2196F3, #1976D2);
+        /* Footer inside Clock Section */
+        .signature {
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            filter: brightness(1.1);
-        }
-
-        .btn:active { 
-            transform: scale(0.96); 
-        }
-
-        .footer { 
-            margin-top: 25px; 
-            color: #7f8c8d; 
-            font-size: 14px; 
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .contact-link {
-            text-decoration: none;
-            color: #3498db;
+        .author-name {
+            font-size: 16px;
+            color: #34495e;
             font-weight: 600;
             display: block;
+        }
+
+        .project-name {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 800;
+            letter-spacing: 3px;
             margin-top: 5px;
+            display: block;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
     <div class="dashboard-card">
-        <h1>KHUTABARI</h1>
-        
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" 
-           target="_blank" class="btn btn-reading">
-            📝 Enter Reading
-        </a>
+        <i class="fas fa-home home-icon-btn" onclick="closeMenu()"></i>
 
-        <a href="https://docs.google.com/spreadsheets/d/1dql8aleIyNBnqlfsFUiEO7QXpIBJVJHCpmCU1nNhfD4/preview" 
-           target="_blank" class="btn btn-view">
-            📄 View Bill
-        </a>
+        <div class="menu-arrow" onclick="toggleMenu()">
+            <i class="fas fa-chevron-right"></i>
+        </div>
 
-        <div class="footer">
-            Made by Adidev Boro <br>
-            <a href="tel:7086187975" class="contact-link">
-                📞 7086187975
-            </a>
+        <div id="home-content">
+            <div class="welcome-text">Hello! 👋</div>
+            <div class="sub-text">Have a Nice Day</div>
+            
+            <div id="clock-display">Loading...</div>
+
+            <div class="signature">
+                <span class="author-name">Made By Adidev Boro</span>
+                <span class="project-name">KHUTABARI</span>
+            </div>
+        </div>
+
+        <div id="side-panel" class="side-menu">
+            <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" 
+               target="_blank" class="btn btn-reading">📝 Enter Reading</a>
+
+            <a href="https://docs.google.com/spreadsheets/d/1dql8aleIyNBnqlfsFUiEO7QXpIBJVJHCpmCU1nNhfD4/preview" 
+               target="_blank" class="btn btn-view">📄 View Bill</a>
+            
+            <div class="close-menu" onclick="closeMenu()">✖ Close Menu</div>
         </div>
     </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('side-panel').classList.add('active');
+        }
+
+        function closeMenu() {
+            document.getElementById('side-panel').classList.remove('active');
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options);
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
 
 </body>
 </html>
