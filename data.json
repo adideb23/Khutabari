@@ -4,6 +4,7 @@
     "customer_name": "Kanu Sutradhar",
     "Rent": "1500",
     "E_Bill": "450",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -11,6 +12,7 @@
     "customer_name": "Sunanda Sutradhar",
     "Rent": "1500",
     "E_Bill": "890",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -18,6 +20,7 @@
     "customer_name": "Dwipen Sutradhar",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -25,6 +28,7 @@
     "customer_name": "Hotel Kanchan",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -32,6 +36,7 @@
     "customer_name": "Mahabbat Ali",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -39,6 +44,7 @@
     "customer_name": "Kapil Khakhalary",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -46,6 +52,7 @@
     "customer_name": "Prasenjit Khakhalary",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -53,6 +60,7 @@
     "customer_name": "Anupam Sutradhar",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -60,6 +68,7 @@
     "customer_name": "Mrinal Banai Boro",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -67,6 +76,7 @@
     "customer_name": "Laba Kumar Paul",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -74,6 +84,7 @@
     "customer_name": "Sukur Banai",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -81,6 +92,7 @@
     "customer_name": "Prahlad Basumatary",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -88,6 +100,7 @@
     "customer_name": "Rajib Sutradhar",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -95,6 +108,7 @@
     "customer_name": "Dimbeshwar Sutradhar",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -102,6 +116,7 @@
     "customer_name": "Dhruba Banai",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   },
   {
@@ -109,6 +124,7 @@
     "customer_name": "Lalit Koch",
     "Rent": "0",
     "E_Bill": "0",
+    "Pre_Balance": "0",
     "Billed_Month": "April 2026"
   }
 ]
