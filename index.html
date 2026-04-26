@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Electricity, Meter Reading, Adidev Boro, Khutabari, adideb23, Adidev Khutabari, Khutabari Electricity, Adidev Boro Khutabari">
-<meta name="description" content="Electricity Reading Entry portal and Khutabari project by Adidev Boro.">
+    <meta name="description" content="Electricity Reading Entry portal and Khutabari project by Adidev Boro.">
     
     <title>Electricity Reading Entry</title>
     <style>
@@ -30,9 +30,9 @@
 
         h1 { 
             color: #2c3e50; 
-            font-size: 26px; /* Heading thoda bada kiya hai */
+            font-size: 26px; 
             margin-bottom: 30px; 
-            border-bottom: 3px solid #f1c40f; /* Electricity ke liye yellow underline */
+            border-bottom: 3px solid #f1c40f; 
             display: inline-block;
             padding-bottom: 5px;
             text-transform: uppercase;
@@ -52,13 +52,19 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
         }
 
+        /* Reading Button - Purple */
         .btn-reading { 
             background: linear-gradient(to right, #673ab7, #512da8);
         }
 
+        /* View Bill Button - Blue/Cyan */
+        .btn-view { 
+            background: linear-gradient(to right, #2196F3, #1976D2);
+        }
+
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(103, 58, 183, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             filter: brightness(1.1);
         }
 
@@ -91,6 +97,11 @@
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" 
            target="_blank" class="btn btn-reading">
             📝 Enter Reading
+        </a>
+
+        <a href="https://docs.google.com/spreadsheets/d/1dql8aleIyNBnqlfsFUiEO7QXpIBJVJHCpmCU1nNhfD4/preview" 
+           target="_blank" class="btn btn-view">
+            📄 View Bill
         </a>
 
         <div class="footer">
