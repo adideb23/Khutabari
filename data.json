@@ -1,130 +1,130 @@
 [
   {
-    "id": "2345",
+    "id": "101",
     "customer_name": "Kanu Sutradhar",
-    "Rent": "1500",
-    "E_Bill": "450",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "1000",
+    "E_Bill": "0",
+    "Pre_Balance": "7000",
+    "Billed_Month": "March 2026"
   },
   {
     "id": "102",
     "customer_name": "Sunanda Sutradhar",
-    "Rent": "1500",
-    "E_Bill": "890",
+    "Rent": "1000",
+    "E_Bill": "0",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "103",
     "customer_name": "Dwipen Sutradhar",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "1000",
+    "E_Bill": "180",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "104",
     "customer_name": "Hotel Kanchan",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "1000",
+    "E_Bill": "570",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "105",
     "customer_name": "Mahabbat Ali",
-    "Rent": "0",
-    "E_Bill": "0",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "500",
+    "E_Bill": "60",
+    "Pre_Balance": "2115",
+    "Billed_Month": "March 2026"
   },
   {
     "id": "106",
     "customer_name": "Kapil Khakhalary",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "300",
+    "E_Bill": "130",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "107",
     "customer_name": "Prasenjit Khakhalary",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "800",
+    "E_Bill": "30",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "108",
     "customer_name": "Anupam Sutradhar",
-    "Rent": "0",
-    "E_Bill": "0",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "800",
+    "E_Bill": "140",
+    "Pre_Balance": "10",
+    "Billed_Month": "March 2026"
   },
   {
     "id": "109",
     "customer_name": "Mrinal Banai Boro",
-    "Rent": "0",
-    "E_Bill": "0",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "800",
+    "E_Bill": "230",
+    "Pre_Balance": "5410",
+    "Billed_Month": "March 2026"
   },
   {
     "id": "110",
     "customer_name": "Laba Kumar Paul",
-    "Rent": "0",
-    "E_Bill": "0",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "700",
+    "E_Bill": "10",
+    "Pre_Balance": "2100",
+    "Billed_Month": "March 2026"
   },
   {
-    "id": "9365001722",
+    "id": "111",
     "customer_name": "Sukur Banai",
-    "Rent": "0",
+    "Rent": "700",
     "E_Bill": "0",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "112",
     "customer_name": "Prahlad Basumatary",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "700",
+    "E_Bill": "80",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "113",
     "customer_name": "Rajib Sutradhar",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "700",
+    "E_Bill": "340",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "114",
     "customer_name": "Dimbeshwar Sutradhar",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "700",
+    "E_Bill": "250",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "115",
     "customer_name": "Dhruba Banai",
-    "Rent": "0",
-    "E_Bill": "0",
+    "Rent": "1200",
+    "E_Bill": "430",
     "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Billed_Month": "March 2026"
   },
   {
     "id": "116",
     "customer_name": "Lalit Koch",
-    "Rent": "0",
-    "E_Bill": "0",
-    "Pre_Balance": "0",
-    "Billed_Month": "April 2026"
+    "Rent": "600",
+    "E_Bill": "40",
+    "Pre_Balance": "1230",
+    "Billed_Month": "March 2026"
   }
 ]
