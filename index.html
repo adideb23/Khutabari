@@ -23,13 +23,15 @@
             background: #ffffff; 
             width: 90%; 
             max-width: 400px; 
-            padding: 50px 25px; 
+            padding: 40px 25px; /* Padding thoda kam kiya */
             border-radius: 24px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
             text-align: center;
             position: relative;
-            min-height: 320px;
-            overflow: hidden; 
+            min-height: 400px; /* Height thoda badhaya taki content na kante */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .home-icon-btn {
@@ -77,7 +79,6 @@
 
         .side-menu.active { transform: translateX(0); }
 
-        /* Bill Modal Styling */
         .bill-overlay {
             position: absolute;
             top: 0;
@@ -88,30 +89,32 @@
             z-index: 11;
             display: none; 
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Top se start hoga */
             align-items: center;
-            padding: 20px;
+            padding: 30px 20px;
             box-sizing: border-box;
+            overflow-y: auto; /* Agar content jyada ho to scroll ho jaye */
         }
 
         .search-input {
             padding: 12px;
             border-radius: 10px;
             border: 1px solid #ccc;
-            width: 80%;
+            width: 85%;
             margin-bottom: 10px;
             font-size: 16px;
             outline: none;
         }
 
         .bill-details {
-            width: 85%;
+            width: 90%;
             text-align: left;
             background: #f9f9f9;
             padding: 15px;
             border-radius: 12px;
             border-left: 5px solid #2196F3;
             margin-top: 15px;
+            box-sizing: border-box;
         }
 
         .btn { 
@@ -129,14 +132,16 @@
         }
         .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
         .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
-        .btn-search { background: #2c3e50; padding: 12px; width: 50%; font-size: 16px; margin-bottom: 10px; }
+        .btn-search { background: #2c3e50; padding: 12px; width: 60%; font-size: 16px; margin-bottom: 10px; }
         
         .close-menu, .close-bill {
-            margin-top: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
             color: #e74c3c;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
+            font-size: 14px;
         }
 
         #clock-display {
@@ -185,7 +190,7 @@
         </div>
 
         <div id="bill-modal" class="bill-overlay">
-            <h2 style="color: #2c3e50; margin-bottom: 10px;">Check Bill</h2>
+            <h2 style="color: #2c3e50; margin-bottom: 15px;">Check Bill</h2>
             
             <input type="text" id="cust-id-input" class="search-input" placeholder="Enter Unique ID">
             <button onclick="fetchCustomerBill()" class="btn btn-search">Search</button>
@@ -194,12 +199,15 @@
                 <p><strong>Name:</strong> <span id="res-name"></span></p>
                 <p><strong>Rent:</strong> ₹<span id="res-rent"></span></p>
                 <p><strong>E-Bill:</strong> ₹<span id="res-bill"></span></p>
+                <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>
                 <p><strong>Month:</strong> <span id="res-date"></span></p>
             </div>
             
             <p id="error-text" style="color: red; display: none; font-size: 14px; margin-top: 10px;">Invalid ID! Please try again.</p>
 
-            <div class="close-bill" onclick="closeBill()">✖ Back</div>
+            <div class="close-bill" onclick="closeBill()">
+                <i class="fas fa-times"></i> BACK
+            </div>
         </div>
     </div>
 
@@ -215,7 +223,6 @@
             closeBill();
         }
 
-        // Bill Logic
         function openBill() {
             document.getElementById('bill-modal').style.display = 'flex';
         }
@@ -238,14 +245,13 @@
                 const response = await fetch('data.json');
                 const users = await response.json();
                 
-                // Find user by ID
                 const user = users.find(u => u.id === searchId);
 
                 if (user) {
-                    // Mapping JSON keys: customer_name, Rent, E_Bill, Billed_Month
                     document.getElementById('res-name').innerText = user.customer_name;
                     document.getElementById('res-rent').innerText = user.Rent;
                     document.getElementById('res-bill').innerText = user.E_Bill;
+                    document.getElementById('res-prebal').innerText = user.Pre_Balance;
                     document.getElementById('res-date').innerText = user.Billed_Month;
                     
                     resultBox.style.display = 'block';
@@ -256,7 +262,7 @@
                 }
             } catch (err) {
                 console.error("Fetch Error:", err);
-                alert("data.json file not found or empty!");
+                alert("data.json not found!");
             }
         }
 
