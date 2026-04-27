@@ -250,7 +250,7 @@
 
             try {
                 // Ensure data.json exists in the same folder
-                const response = await fetch('data.json');
+                const response = await fetch('data.json?t=' + new Date().getTime());
                 const users = await response.json();
                 
                 const user = users.find(u => u.id === searchId);
