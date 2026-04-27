@@ -3,17 +3,17 @@
     "id": "101",
     "customer_name": "Kanu Sutradhar",
     "Rent": "1000",
-    "E_Bill": "",
-    "Pre_Balance": "",
+    "E_Bill": "30",
+    "Pre_Balance": "60",
     "Billed_Month": ""
   },
   {
     "id": "102",
     "customer_name": "Sunanda Sutradhar",
     "Rent": "1000",
-    "E_Bill": "",
-    "Pre_Balance": "",
-    "Billed_Month": ""
+    "E_Bill": "10",
+    "Pre_Balance": "220",
+    "Billed_Month": "Sun Mar 01 2026 00:00:00 GMT+0530 (India Standard Time)"
   },
   {
     "id": "103",
