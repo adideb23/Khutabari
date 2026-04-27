@@ -29,7 +29,6 @@
             text-align: center;
             position: relative;
             min-height: 400px;
-            /* Flex layout ko strictly vertical rakha hai */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -60,14 +59,13 @@
             transition: 0.3s;
         }
 
-        /* Side Menu Layout Fix */
         .side-menu {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff; /* Transparent ki jagah solid white */
+            background: #ffffff;
             border-radius: 24px;
             display: flex;
             flex-direction: column;
@@ -84,7 +82,7 @@
             transform: translateX(0); 
         }
 
-        /* Bill Overlay Section */
+        /* [FIX] Button Visibility: Padding bottom badhaya aur scroll chalu kiya */
         .bill-overlay {
             position: absolute;
             top: 0;
@@ -97,8 +95,9 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            padding: 30px 20px;
+            padding: 30px 20px 80px 20px; 
             box-sizing: border-box;
+            overflow-y: auto; 
         }
 
         .search-input {
@@ -140,12 +139,13 @@
         .btn-search { background: #2c3e50; padding: 12px; width: 60%; font-size: 16px; margin-bottom: 10px; }
         
         .close-menu, .close-bill {
-            margin-top: 20px;
+            margin-top: 25px;
             color: #e74c3c;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 14px;
+            padding-bottom: 10px;
         }
 
         #clock-display {
@@ -156,7 +156,7 @@
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            width: 90%; /* Fixed width for alignment */
+            width: 90%; 
             margin-left: auto;
             margin-right: auto;
         }
@@ -249,11 +249,11 @@
             if (!searchId) return;
 
             try {
-                // Ensure data.json exists in the same folder
-                const response = await fetch('data.json');
+                // [FIX] TIMESTAMP CACHE FIX: data.json?t=...
+                const response = await fetch('data.json?t=' + new Date().getTime());
                 const users = await response.json();
                 
-                const user = users.find(u => u.id === searchId);
+                const user = users.find(u => u.id === searchId || u.id == searchId);
 
                 if (user) {
                     document.getElementById('res-name').innerText = user.customer_name;
@@ -263,24 +263,3 @@
                     document.getElementById('res-date').innerText = user.Billed_Month;
                     
                     resultBox.style.display = 'block';
-                    errorText.style.display = 'none';
-                } else {
-                    resultBox.style.display = 'none';
-                    errorText.style.display = 'block';
-                }
-            } catch (err) {
-                console.error("Fetch Error:", err);
-                alert("data.json not found or server error!");
-            }
-        }
-
-        function updateTime() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options);
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
-</body>
-</html>
