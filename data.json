@@ -68,14 +68,14 @@
     "customer_name": "Mrinal Banai Boro",
     "Rent": "800",
     "E_Bill": "230",
-    "Pre_Balance": "",
+    "Pre_Balance": "5410",
     "Billed_Month": "March 2026"
   },
   {
     "id": "110",
     "customer_name": "Laba kumar Paul",
     "Rent": "700",
-    "E_Bill": "",
+    "E_Bill": "10",
     "Pre_Balance": "",
     "Billed_Month": "March 2026"
   },
