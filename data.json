@@ -77,7 +77,7 @@
     "Rent": "700",
     "E_Bill": "10",
     "Pre_Balance": "2100",
-    "Billed_Month": "April 2026"
+    "Billed_Month": ""
   },
   {
     "id": "111",
@@ -85,7 +85,7 @@
     "Rent": "700",
     "E_Bill": "",
     "Pre_Balance": "",
-    "Billed_Month": "April 2026"
+    "Billed_Month": ""
   },
   {
     "id": "112",
