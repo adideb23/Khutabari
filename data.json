@@ -126,13 +126,5 @@
     "E_Bill": "40",
     "Pre_Balance": "1230",
     "Billed_Month": "March 2026"
-  },
-  {
-    "id": "222",
-    "customer_name": "Adidev Boro",
-    "Rent": "70",
-    "E_Bill": "80",
-    "Pre_Balance": "90",
-    "Billed_Month": ""
   }
 ]
