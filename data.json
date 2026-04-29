@@ -5,10 +5,9 @@
     "Rent": "1000",
     "E_Bill": "0",
     "Pre_Balance": "7000",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "102",
@@ -16,10 +15,9 @@
     "Rent": "1000",
     "E_Bill": "0",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "103",
@@ -27,10 +25,9 @@
     "Rent": "1000",
     "E_Bill": "180",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "104",
@@ -38,10 +35,9 @@
     "Rent": "1000",
     "E_Bill": "570",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "105",
@@ -49,10 +45,9 @@
     "Rent": "500",
     "E_Bill": "60",
     "Pre_Balance": "2115",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "106",
@@ -60,10 +55,9 @@
     "Rent": "300",
     "E_Bill": "130",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "107",
@@ -71,10 +65,9 @@
     "Rent": "800",
     "E_Bill": "30",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "108",
@@ -82,10 +75,9 @@
     "Rent": "800",
     "E_Bill": "140",
     "Pre_Balance": "10",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "109",
@@ -93,10 +85,9 @@
     "Rent": "800",
     "E_Bill": "230",
     "Pre_Balance": "5410",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "110",
@@ -104,10 +95,9 @@
     "Rent": "700",
     "E_Bill": "10",
     "Pre_Balance": "2100",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "111",
@@ -115,10 +105,9 @@
     "Rent": "700",
     "E_Bill": "0",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "112",
@@ -126,10 +115,9 @@
     "Rent": "700",
     "E_Bill": "80",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "113",
@@ -137,10 +125,9 @@
     "Rent": "700",
     "E_Bill": "340",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "114",
@@ -148,10 +135,9 @@
     "Rent": "700",
     "E_Bill": "250",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "115",
@@ -159,10 +145,9 @@
     "Rent": "1200",
     "E_Bill": "430",
     "Pre_Balance": "0",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   },
   {
     "id": "116",
@@ -170,9 +155,8 @@
     "Rent": "600",
     "E_Bill": "40",
     "Pre_Balance": "1230",
-    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
-    "true": ""
+    "false": ""
   }
 ]
