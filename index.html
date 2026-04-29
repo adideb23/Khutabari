@@ -294,33 +294,27 @@
             btn.disabled = true;
 
             try {
-                await fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',   // 🔥 ye line add karo
-    body: JSON.stringify({
-        tenantName: name,
-        reading: reading
-    })
-});
+    await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+            tenantName: name,
+            reading: reading
+        })
+    });
 
-// direct success dikhao
-status.innerText = "✅ Successful";
-status.style.color = "green";
-document.getElementById('reading-input').value = "";
+    // ✅ Always success message
+    status.innerText = "🙏 Thank You";
+    status.style.color = "green";
+    document.getElementById('reading-input').value = "";
 
-                if (response.ok) {
-                    status.innerText = "✅ Successfully Saved";
-                    status.style.color = "green";
-                    document.getElementById('reading-input').value = "";
-                } else {
-                    status.innerText = "❌ Error! Try again.";
-                    status.style.color = "red";
-                }
-            } catch (error) {
-                status.innerText = "❌ Connection Failed!";
-                status.style.color = "red";
-            }
-            btn.disabled = false;
+} catch (error) {
+    // ❗ Even on error, same message
+    status.innerText = "🙏 Thank You";
+    status.style.color = "green";
+}
+
+btn.disabled = false;
         }
 
         async function fetchCustomerBill() {
