@@ -287,7 +287,15 @@
             const status = document.getElementById('reading-status');
             const btn = document.getElementById('submit-btn');
 
-            if (!reading) { alert("Please enter reading!"); return; }
+            if (!name) {
+    alert("Please select a tenant!");
+    return;
+}
+
+if (!reading) {
+    alert("Please enter reading!");
+    return;
+}
 
             status.innerText = "Saving Data...";
             status.style.color = "orange";
