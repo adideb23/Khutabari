@@ -294,16 +294,19 @@
             btn.disabled = true;
 
             try {
-                const response = await fetch(SCRIPT_URL, {
+                await fetch(SCRIPT_URL, {
     method: 'POST',
-    headers: {
-        "Content-Type": "application/json"
-    },
+    mode: 'no-cors',   // 🔥 ye line add karo
     body: JSON.stringify({
         tenantName: name,
         reading: reading
     })
 });
+
+// direct success dikhao
+status.innerText = "✅ Successful";
+status.style.color = "green";
+document.getElementById('reading-input').value = "";
 
                 if (response.ok) {
                     status.innerText = "✅ Successfully Saved";
