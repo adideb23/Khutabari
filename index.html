@@ -243,7 +243,8 @@ transition: transform 0.4s ease-in-out;
             <p><strong>Name:</strong> <span id="res-name"></span></p>  
             <p><strong>Rent:</strong> ₹<span id="res-rent"></span></p>  
             <p><strong>E-Bill:</strong> ₹<span id="res-bill"></span></p>  
-            <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>  
+            <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>
+            <p><strong>Total:</strong> ₹<span id="res-total"></span></p>
             <p><strong>Month:</strong> <span id="res-date"></span></p>  
         </div>  
         <p id="error-text" style="color: red; display: none; font-size: 14px;">Invalid ID! Try again.</p>  
@@ -342,7 +343,8 @@ async function fetchCustomerBill() {
                 document.getElementById('res-name').innerText = user.customer_name;  
                 document.getElementById('res-rent').innerText = user.Rent;  
                 document.getElementById('res-bill').innerText = user.E_Bill;  
-                document.getElementById('res-prebal').innerText = user.Pre_Balance;  
+                document.getElementById('res-prebal').innerText = user.Pre_Balance;
+                document.getElementById("res-total").innerText = user.Total;
                 document.getElementById('res-date').innerText = user.Billed_Month;  
                 resultBox.style.display = 'block';  
                 errorText.style.display = 'none';  
