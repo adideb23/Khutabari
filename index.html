@@ -344,12 +344,6 @@ btn.disabled = false;
                     document.getElementById('res-rent').innerText = user.Rent;
                     document.getElementById('res-bill').innerText = user.E_Bill;
                     document.getElementById('res-prebal').innerText = user.Pre_Balance;
-                    const rent = Number(user.Rent) || 0;
-const ebill = Number(user.E_Bill) || 0;
-const prebal = Number(user.Pre_Balance) || 0;
-const total = rent + ebill + prebal;
-
-document.getElementById('res-total').innerText = total;
                     document.getElementById('res-date').innerText = user.Billed_Month;
                     resultBox.style.display = 'block';
                     errorText.style.display = 'none';
