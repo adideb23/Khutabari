@@ -1,365 +1,366 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Khutabari Portal, Khutabari Rent, Adidev Khutabari, Adidev portal, Khutabari electricity Portal, Electricity, Meter Reading, Adidev Boro, Khutabari, adideb23, Adidev Boro Khutabari">
-    <meta name="description" content="Official Khutabari Electricity Reading Entry portal and project dashboard by Adidev Boro.">
-    <title>KHUTABARI Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh;
-            margin: 0; 
-            overflow: hidden; 
-        }
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="keywords" content="Khutabari Portal, Khutabari Rent, Adidev Khutabari, Adidev portal, Khutabari electricity Portal, Electricity, Meter Reading, Adidev Boro, Khutabari, adideb23, Adidev Boro Khutabari">  
+    <meta name="description" content="Official Khutabari Electricity Reading Entry portal and project dashboard by Adidev Boro.">  
+    <title>KHUTABARI Portal</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">  
+    <style>  
+        body {   
+            font-family: 'Segoe UI', Arial, sans-serif;   
+            background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);  
+            display: flex;   
+            justify-content: center;   
+            align-items: center;   
+            height: 100vh;  
+            margin: 0;   
+            overflow: hidden;   
+        }  .dashboard-card {   
+        background: #ffffff;   
+        width: 90%;   
+        max-width: 400px;   
+        padding: 40px 25px;   
+        border-radius: 24px;   
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);   
+        text-align: center;  
+        position: relative;  
+        min-height: 400px;  
+        display: flex;  
+        flex-direction: column;  
+        justify-content: center;  
+        overflow: hidden;   
+    }  
 
-        .dashboard-card { 
-            background: #ffffff; 
-            width: 90%; 
-            max-width: 400px; 
-            padding: 40px 25px; 
-            border-radius: 24px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
-            text-align: center;
-            position: relative;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden; 
-        }
+    .home-icon-btn {  
+position: absolute;  
+top: 20px;  
+left: 20px;  
+font-size: 24px;  
+color: #27ae60;  
+cursor: pointer;  
+z-index: 11;
 
-        .home-icon-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 24px;
-    color: #27ae60;
-    cursor: pointer;
-    z-index: 11;
 }
 
-        .menu-arrow {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #2c3e50;
-    color: white;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: 0.3s;
+.menu-arrow {  
+position: absolute;  
+top: 20px;  
+right: 20px;  
+background: #2c3e50;  
+color: white;  
+width: 44px;  
+height: 44px;  
+border-radius: 12px;  
+display: flex;  
+align-items: center;  
+justify-content: center;  
+cursor: pointer;  
+z-index: 10;  
+transition: 0.3s;
+
 }
 
-        .side-menu {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    z-index: 9;
-    transform: translateX(100%);
-    transition: transform 0.4s ease-in-out;
+.side-menu {  
+position: absolute;  
+top: 0;  
+right: 0;  
+width: 100%;  
+height: 100%;  
+background: #ffffff;  
+border-radius: 24px;  
+display: flex;  
+flex-direction: column;  
+justify-content: center;  
+align-items: center;  
+padding: 20px;  
+box-sizing: border-box;  
+z-index: 9;  
+transform: translateX(100%);  
+transition: transform 0.4s ease-in-out;
+
 }
 
-        .side-menu.active { transform: translateX(0); }
+.side-menu.active { transform: translateX(0); }  
 
-        .overlay-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 11;
-            display: none; 
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 30px 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
+    .overlay-panel {  
+        position: absolute;  
+        top: 0;  
+        left: 0;  
+        width: 100%;  
+        height: 100%;  
+        background: white;  
+        z-index: 11;  
+        display: none;   
+        flex-direction: column;  
+        justify-content: flex-start;  
+        align-items: center;  
+        padding: 30px 20px;  
+        box-sizing: border-box;  
+        overflow-y: auto;  
+    }  
 
-        .input-field {
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            width: 90%; /* Fixed width to match both boxes */
-            margin-bottom: 15px;
-            font-size: 16px;
-            outline: none;
-            background: #fdfdfd;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
-        }
+    .input-field {  
+        padding: 12px;  
+        border-radius: 10px;  
+        border: 1px solid #ccc;  
+        width: 90%; /* Fixed width to match both boxes */  
+        margin-bottom: 15px;  
+        font-size: 16px;  
+        outline: none;  
+        background: #fdfdfd;  
+        box-sizing: border-box; /* Ensures padding doesn't affect width */  
+    }  
 
-        .btn { 
-            display: block; 
-            text-decoration: none; 
-            color: white; 
-            padding: 18px; 
-            margin-bottom: 15px; 
-            border-radius: 15px; 
-            font-size: 18px; 
-            font-weight: 700; 
-            width: 85%;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
-        .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
-        .btn-submit { background: #27ae60; padding: 12px; width: 60%; font-size: 16px; }
-        
-        .close-btn {
-            margin-top: 20px;
-            color: #e74c3c;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-        }
+    .btn {   
+        display: block;   
+        text-decoration: none;   
+        color: white;   
+        padding: 18px;   
+        margin-bottom: 15px;   
+        border-radius: 15px;   
+        font-size: 18px;   
+        font-weight: 700;   
+        width: 85%;  
+        border: none;  
+        cursor: pointer;  
+    }  
+    .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }  
+    .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }  
+    .btn-submit { background: #27ae60; padding: 12px; width: 60%; font-size: 16px; }  
+      
+    .close-btn {  
+        margin-top: 20px;  
+        color: #e74c3c;  
+        font-weight: bold;  
+        cursor: pointer;  
+        font-size: 14px;  
+    }  
 
-        .close-menu {
-            margin-top: 40px; 
-            color: #e74c3c;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
+    .close-menu {  
+        margin-top: 40px;   
+        color: #e74c3c;  
+        font-weight: bold;  
+        cursor: pointer;  
+        text-transform: uppercase;  
+        font-size: 14px;  
+    }  
 
-        #clock-display {
-            font-size: 18px;
-            color: #d35400;
-            font-weight: bold;
-            background: #fff5e6;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            width: 90%;
-            margin: 0 auto 20px auto;
-        }
+    #clock-display {  
+        font-size: 18px;  
+        color: #d35400;  
+        font-weight: bold;  
+        background: #fff5e6;  
+        padding: 15px;  
+        border-radius: 12px;  
+        margin-bottom: 20px;  
+        width: 90%;  
+        margin: 0 auto 20px auto;  
+    }  
 
-        .signature { margin-top: 10px; border-top: 1px solid #eee; padding-top: 15px; }
-        .project-name { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #2c3e50; display: block; text-transform: uppercase; }
-        .call-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: 600; }
-        
-        .bill-details {
-            width: 90%;
-            text-align: left;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 5px solid #2196F3;
-            margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
+    .signature { margin-top: 10px; border-top: 1px solid #eee; padding-top: 15px; }  
+    .project-name { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #2c3e50; display: block; text-transform: uppercase; }  
+    .call-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: 600; }  
+      
+    .bill-details {  
+        width: 90%;  
+        text-align: left;  
+        background: #f9f9f9;  
+        padding: 15px;  
+        border-radius: 12px;  
+        border-left: 5px solid #2196F3;  
+        margin-top: 15px;  
+    }  
+</style>
 
-    <div class="dashboard-card">
-        <i class="fas fa-home home-icon-btn" onclick="closeAll()"></i>
+</head>  
+<body>  <div class="dashboard-card">  
+    <i class="fas fa-home home-icon-btn" onclick="closeAll()"></i>  
 
-        <div class="menu-arrow" onclick="toggleMenu()">
-    <i class="fas fa-bars"></i>
-</div>
+    <div class="menu-arrow" onclick="toggleMenu()">  
+<i class="fas fa-bars"></i>
 
-        <div id="home-content">
-            <div style="font-size: 28px; font-weight: bold;">Hello! 👋</div>
-            <div style="color: #7f8c8d; margin-bottom: 20px;">Have a Nice Day</div>
-            <div id="clock-display">Loading...</div>
+</div>  <div id="home-content">  
+        <div style="font-size: 28px; font-weight: bold;">Hello! 👋</div>  
+        <div style="color: #7f8c8d; margin-bottom: 20px;">Have a Nice Day</div>  
+        <div id="clock-display">Loading...</div>  
 
-            <div class="signature">
-                <span style="color: #7f8c8d;">Made By Adidev Boro</span>
-                <span class="project-name">KHUTABARI</span>
-                <a href="tel:7086187975" class="call-link">
-                    <i class="fas fa-phone-alt" style="color: #27ae60;"></i> 7086187975
-                </a>
-            </div>
-        </div>
+        <div class="signature">  
+            <span style="color: #7f8c8d;">Made By Adidev Boro</span>  
+            <span class="project-name">KHUTABARI</span>  
+            <a href="tel:7086187975" class="call-link">  
+                <i class="fas fa-phone-alt" style="color: #27ae60;"></i> 7086187975  
+            </a>  
+        </div>  
+    </div>  
 
-        <div id="side-panel" class="side-menu">
-            <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>
-            <button onclick="openReadingForm()" class="btn btn-reading">📝 Enter Reading</button>
-            <button onclick="openBill()" class="btn btn-view">📄 View Bill</button>
-            <div class="close-menu" onclick="closeMenu()">✖ CLOSE MENU</div>
-        </div>
+    <div id="side-panel" class="side-menu">  
+        <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>  
+        <button onclick="openReadingForm()" class="btn btn-reading">📝 Enter Reading</button>  
+        <button onclick="openBill()" class="btn btn-view">📄 View Bill</button>  
+        <div class="close-menu" onclick="closeMenu()">✖ CLOSE MENU</div>  
+    </div>  
 
-        <div id="reading-modal" class="overlay-panel">
-            <h2 style="color: #673ab7; margin-bottom: 15px;">Meter Reading</h2>
-            
-            <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Select Tenant:</label>
-            <select id="tenant-select" class="input-field" required>
-                <option value="" selected disabled>-- Select Tenant --</option>
-                <option value="Sunanda Sutradhar">Sunanda Sutradhar</option>
-                <option value="Dwipen Sutradhar">Dwipen Sutradhar</option>
-                <option value="Hotel Kanchan">Hotel Kanchan</option>
-                <option value="Mahabbat Ali">Mahabbat Ali</option>
-                <option value="Kapil Khakhalary">Kapil Khakhalary</option>
-                <option value="Prasenjit Khakhalary">Prasenjit Khakhalary</option>
-                <option value="Anupam Sutradhar">Anupam Sutradhar</option>
-                <option value="Mrinal Banai Boro">Mrinal Banai Boro</option>
-                <option value="Laba kumar Paul">Laba kumar Paul</option>
-                <option value="Prahlad Basumatary">Prahlad Basumatary</option>
-                <option value="Rajib Sutradhar">Rajib Sutradhar</option>
-                <option value="Dimbeshwar Sutradhar">Dimbeshwar Sutradhar</option>
-                <option value="Dhruba Banai">Dhruba Banai</option>
-                <option value="Lalit Koch">Lalit Koch</option>
-            </select>
+    <div id="reading-modal" class="overlay-panel">  
+        <h2 style="color: #673ab7; margin-bottom: 15px;">Meter Reading</h2>  
+          
+        <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Select Tenant:</label>  
+        <select id="tenant-select" class="input-field" required>  
+            <option value="" selected disabled>-- Select Tenant --</option>  
+            <option value="Sunanda Sutradhar">Sunanda Sutradhar</option>  
+            <option value="Dwipen Sutradhar">Dwipen Sutradhar</option>  
+            <option value="Hotel Kanchan">Hotel Kanchan</option>  
+            <option value="Mahabbat Ali">Mahabbat Ali</option>  
+            <option value="Kapil Khakhalary">Kapil Khakhalary</option>  
+            <option value="Prasenjit Khakhalary">Prasenjit Khakhalary</option>  
+            <option value="Anupam Sutradhar">Anupam Sutradhar</option>  
+            <option value="Mrinal Banai Boro">Mrinal Banai Boro</option>  
+            <option value="Laba kumar Paul">Laba kumar Paul</option>  
+            <option value="Prahlad Basumatary">Prahlad Basumatary</option>  
+            <option value="Rajib Sutradhar">Rajib Sutradhar</option>  
+            <option value="Dimbeshwar Sutradhar">Dimbeshwar Sutradhar</option>  
+            <option value="Dhruba Banai">Dhruba Banai</option>  
+            <option value="Lalit Koch">Lalit Koch</option>  
+        </select>  
 
-            <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Current Reading:</label>
-            <input type="number" id="reading-input" class="input-field" placeholder="Enter Units">
-            
-            <button onclick="submitMeterReading()" class="btn btn-submit" id="submit-btn">Submit</button>
-            <p id="reading-status" style="font-size: 14px; margin-top: 10px;"></p>
+        <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Current Reading:</label>  
+        <input type="number" id="reading-input" class="input-field" placeholder="Enter Units">  
+          
+        <button onclick="submitMeterReading()" class="btn btn-submit" id="submit-btn">Submit</button>  
+        <p id="reading-status" style="font-size: 14px; margin-top: 10px;"></p>  
 
-            <div class="close-btn" onclick="closeReadingForm()">
-                <i class="fas fa-times"></i> BACK
-            </div>
-        </div>
+        <div class="close-btn" onclick="closeReadingForm()">  
+            <i class="fas fa-times"></i> BACK  
+        </div>  
+    </div>  
 
-        <div id="bill-modal" class="overlay-panel">
-            <h2 style="color: #2196F3; margin-bottom: 15px;">Check Bill</h2>
-            <input type="text" id="cust-id-input" class="input-field" placeholder="Enter Unique ID">
-            <button onclick="fetchCustomerBill()" class="btn btn-view" style="width:60%; padding:12px; font-size:16px;">Search</button>
+    <div id="bill-modal" class="overlay-panel">  
+        <h2 style="color: #2196F3; margin-bottom: 15px;">Check Bill</h2>  
+        <input type="text" id="cust-id-input" class="input-field" placeholder="Enter Unique ID">  
+        <button onclick="fetchCustomerBill()" class="btn btn-view" style="width:60%; padding:12px; font-size:16px;">Search</button>  
 
-            <div id="bill-result-box" class="bill-details" style="display: none;">
-                <p><strong>Rent:</strong> ₹<span id="res-rent"></span></p>
-                <p><strong>E-Bill:</strong> ₹<span id="res-bill"></span></p>
-                <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>
-                <p><strong>Month:</strong> <span id="res-date"></span></p>
-            </div>
-            <p id="error-text" style="color: red; display: none; font-size: 14px;">Invalid ID! Try again.</p>
+        <div id="bill-result-box" class="bill-details" style="display: none;">  
+            <p><strong>Name:</strong> <span id="res-name"></span></p>  
+            <p><strong>Rent:</strong> ₹<span id="res-rent"></span></p>  
+            <p><strong>E-Bill:</strong> ₹<span id="res-bill"></span></p>  
+            <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>  
+            <p><strong>Month:</strong> <span id="res-date"></span></p>  
+        </div>  
+        <p id="error-text" style="color: red; display: none; font-size: 14px;">Invalid ID! Try again.</p>  
 
-            <div class="close-btn" onclick="closeBill()">
-                <i class="fas fa-times"></i> BACK
-            </div>
-        </div>
-    </div>
+        <div class="close-btn" onclick="closeBill()">  
+            <i class="fas fa-times"></i> BACK  
+        </div>  
+    </div>  
+</div>  
 
-    <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
+<script>  
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';  
 
-        function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }
-        function closeMenu() { document.getElementById('side-panel').classList.remove('active'); }
-        
-        function openReadingForm() { 
-            closeMenu();
-            document.getElementById('reading-modal').style.display = 'flex'; 
-        }
-        function closeReadingForm() { 
-            document.getElementById('reading-modal').style.display = 'none';
-            document.getElementById('reading-status').innerText = '';
-            document.getElementById('reading-input').value = '';
-        }
+    function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }  
+    function closeMenu() { document.getElementById('side-panel').classList.remove('active'); }  
+      
+    function openReadingForm() {   
+        closeMenu();  
+        document.getElementById('reading-modal').style.display = 'flex';   
+    }  
+    function closeReadingForm() {   
+        document.getElementById('reading-modal').style.display = 'none';  
+        document.getElementById('reading-status').innerText = '';  
+        document.getElementById('reading-input').value = '';  
+    }  
 
-        function openBill() { 
-            closeMenu();
-            document.getElementById('bill-modal').style.display = 'flex'; 
-        }
-        function closeBill() { 
-            document.getElementById('bill-modal').style.display = 'none';
-            document.getElementById('cust-id-input').value = '';
-            document.getElementById('bill-result-box').style.display = 'none';
-            document.getElementById('error-text').style.display = 'none';
-        }
+    function openBill() {   
+        closeMenu();  
+        document.getElementById('bill-modal').style.display = 'flex';   
+    }  
+    function closeBill() {   
+        document.getElementById('bill-modal').style.display = 'none';  
+        document.getElementById('cust-id-input').value = '';  
+        document.getElementById('bill-result-box').style.display = 'none';  
+        document.getElementById('error-text').style.display = 'none';  
+    }  
 
-        function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }
+    function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }  
 
-        async function submitMeterReading() {
-            const name = document.getElementById('tenant-select').value;
-            const reading = document.getElementById('reading-input').value;
-            const status = document.getElementById('reading-status');
-            const btn = document.getElementById('submit-btn');
+    async function submitMeterReading() {  
+        const name = document.getElementById('tenant-select').value;  
+        const reading = document.getElementById('reading-input').value;  
+        const status = document.getElementById('reading-status');  
+        const btn = document.getElementById('submit-btn');  
 
-            if (!name) {
-    alert("Please select a tenant!");
-    return;
+        if (!name) {  
+alert("Please select a tenant!");  
+return;
+
 }
 
 if (!reading) {
-    alert("Please enter reading!");
-    return;
+alert("Please enter reading!");
+return;
 }
 
-            status.innerText = "Saving Data...";
-            status.style.color = "orange";
-            btn.disabled = true;
+status.innerText = "Saving Data...";  
+        status.style.color = "orange";  
+        btn.disabled = true;  
 
-            try {
-    await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({
-            tenantName: name,
-            reading: reading
-        })
-    });
+        try {  
+await fetch(SCRIPT_URL, {  
+    method: 'POST',  
+    mode: 'no-cors',  
+    body: JSON.stringify({  
+        tenantName: name,  
+        reading: reading  
+    })  
+});  
 
-    // ✅ Always success message
-    status.innerText = "🙏 Thank You";
-    status.style.color = "green";
-    document.getElementById('reading-input').value = "";
+// ✅ Always success message  
+status.innerText = "🙏 Thank You";  
+status.style.color = "green";  
+document.getElementById('reading-input').value = "";
 
 } catch (error) {
-    // ❗ Even on error, same message
-    status.innerText = "🙏 Thank You";
-    status.style.color = "green";
+// ❗ Even on error, same message
+status.innerText = "🙏 Thank You";
+status.style.color = "green";
 }
 
 btn.disabled = false;
-        }
+}
 
-        async function fetchCustomerBill() {
-            const searchId = document.getElementById('cust-id-input').value.trim();
-            const resultBox = document.getElementById('bill-result-box');
-            const errorText = document.getElementById('error-text');
-            if (!searchId) return;
+async function fetchCustomerBill() {  
+        const searchId = document.getElementById('cust-id-input').value.trim();  
+        const resultBox = document.getElementById('bill-result-box');  
+        const errorText = document.getElementById('error-text');  
+        if (!searchId) return;  
 
-            try {
-                const response = await fetch('data.json?t=' + new Date().getTime());
-                const users = await response.json();
-                const user = users.find(u => u.id === searchId);
-                if (user) {
-                    document.getElementById('res-name').innerText = user.customer_name;
-                    document.getElementById('res-rent').innerText = user.Rent;
-                    document.getElementById('res-bill').innerText = user.E_Bill;
-                    document.getElementById('res-prebal').innerText = user.Pre_Balance;
-                    document.getElementById('res-date').innerText = user.Billed_Month;
-                    resultBox.style.display = 'block';
-                    errorText.style.display = 'none';
-                } else {
-                    resultBox.style.display = 'none';
-                    errorText.style.display = 'block';
-                }
-            } catch (err) { alert("data.json not found!"); }
-        }
+        try {  
+            const response = await fetch('data.json?t=' + new Date().getTime());  
+            const users = await response.json();  
+            const user = users.find(u => u.id === searchId);  
+            if (user) {  
+                document.getElementById('res-name').innerText = user.customer_name;  
+                document.getElementById('res-rent').innerText = user.Rent;  
+                document.getElementById('res-bill').innerText = user.E_Bill;  
+                document.getElementById('res-prebal').innerText = user.Pre_Balance;  
+                document.getElementById('res-date').innerText = user.Billed_Month;  
+                resultBox.style.display = 'block';  
+                errorText.style.display = 'none';  
+            } else {  
+                resultBox.style.display = 'none';  
+                errorText.style.display = 'block';  
+            }  
+        } catch (err) { alert("data.json not found!"); }  
+    }  
 
-        function updateTime() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options);
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
-</body>
+    function updateTime() {  
+        const now = new Date();  
+        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };  
+        document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options);  
+    }  
+    setInterval(updateTime, 1000);  
+    updateTime();  
+</script>
+
+</body>  
 </html>
