@@ -14,7 +14,7 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
+            height: 100vh;
             margin: 0; 
             overflow: hidden; 
         }
@@ -29,7 +29,6 @@
             text-align: center;
             position: relative;
             min-height: 400px;
-            /* Flex layout ko strictly vertical rakha hai */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -60,14 +59,13 @@
             transition: 0.3s;
         }
 
-        /* Side Menu Layout Fix */
         .side-menu {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff; /* Transparent ki jagah solid white */
+            background: #ffffff;
             border-radius: 24px;
             display: flex;
             flex-direction: column;
@@ -80,12 +78,9 @@
             transition: transform 0.4s ease-in-out;
         }
 
-        .side-menu.active { 
-            transform: translateX(0); 
-        }
+        .side-menu.active { transform: translateX(0); }
 
-        /* Bill Overlay Section */
-        .bill-overlay {
+        .overlay-panel {
             position: absolute;
             top: 0;
             left: 0;
@@ -99,27 +94,19 @@
             align-items: center;
             padding: 30px 20px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
-        .search-input {
+        .input-field {
             padding: 12px;
             border-radius: 10px;
             border: 1px solid #ccc;
-            width: 85%;
-            margin-bottom: 10px;
+            width: 90%; /* Fixed width to match both boxes */
+            margin-bottom: 15px;
             font-size: 16px;
             outline: none;
-        }
-
-        .bill-details {
-            width: 90%;
-            text-align: left;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 5px solid #2196F3;
-            margin-top: 15px;
-            box-sizing: border-box;
+            background: #fdfdfd;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
         }
 
         .btn { 
@@ -137,10 +124,18 @@
         }
         .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
         .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
-        .btn-search { background: #2c3e50; padding: 12px; width: 60%; font-size: 16px; margin-bottom: 10px; }
+        .btn-submit { background: #27ae60; padding: 12px; width: 60%; font-size: 16px; }
         
-        .close-menu, .close-bill {
+        .close-btn {
             margin-top: 20px;
+            color: #e74c3c;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .close-menu {
+            margin-top: 40px; 
             color: #e74c3c;
             font-weight: bold;
             cursor: pointer;
@@ -156,14 +151,23 @@
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 20px;
-            width: 90%; /* Fixed width for alignment */
-            margin-left: auto;
-            margin-right: auto;
+            width: 90%;
+            margin: 0 auto 20px auto;
         }
 
         .signature { margin-top: 10px; border-top: 1px solid #eee; padding-top: 15px; }
         .project-name { font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #2c3e50; display: block; text-transform: uppercase; }
         .call-link { display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: 600; }
+        
+        .bill-details {
+            width: 90%;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid #2196F3;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -191,16 +195,47 @@
 
         <div id="side-panel" class="side-menu">
             <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeozUFzRkVBycY7pN8_-1Gy73whHa2qslEnJNKKJrJcBMmXeA/viewform" target="_blank" class="btn btn-reading">📝 Enter Reading</a>
+            <button onclick="openReadingForm()" class="btn btn-reading">📝 Enter Reading</button>
             <button onclick="openBill()" class="btn btn-view">📄 View Bill</button>
             <div class="close-menu" onclick="closeMenu()">✖ CLOSE MENU</div>
         </div>
 
-        <div id="bill-modal" class="bill-overlay">
-            <h2 style="color: #2c3e50; margin-bottom: 15px;">Check Bill</h2>
+        <div id="reading-modal" class="overlay-panel">
+            <h2 style="color: #673ab7; margin-bottom: 15px;">Meter Reading</h2>
             
-            <input type="text" id="cust-id-input" class="search-input" placeholder="Enter Unique ID">
-            <button onclick="fetchCustomerBill()" class="btn btn-search">Search</button>
+            <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Select Tenant:</label>
+            <select id="tenant-select" class="input-field">
+                <option value="Sunanda Sutradhar">Sunanda Sutradhar</option>
+                <option value="Dwipen Sutradhar">Dwipen Sutradhar</option>
+                <option value="Hotel Kanchan">Hotel Kanchan</option>
+                <option value="Mahabbat Ali">Mahabbat Ali</option>
+                <option value="Kapil Khakhalary">Kapil Khakhalary</option>
+                <option value="Prasenjit Khakhalary">Prasenjit Khakhalary</option>
+                <option value="Anupam Sutradhar">Anupam Sutradhar</option>
+                <option value="Mrinal Banai Boro">Mrinal Banai Boro</option>
+                <option value="Laba kumar Paul">Laba kumar Paul</option>
+                <option value="Prahlad Basumatary">Prahlad Basumatary</option>
+                <option value="Rajib Sutradhar">Rajib Sutradhar</option>
+                <option value="Dimbeshwar Sutradhar">Dimbeshwar Sutradhar</option>
+                <option value="Dhruba Banai">Dhruba Banai</option>
+                <option value="Lalit Koch">Lalit Koch</option>
+            </select>
+
+            <label style="align-self: flex-start; margin-left: 5%; font-weight: bold;">Current Reading:</label>
+            <input type="number" id="reading-input" class="input-field" placeholder="Enter Units">
+            
+            <button onclick="submitMeterReading()" class="btn btn-submit" id="submit-btn">Submit</button>
+            <p id="reading-status" style="font-size: 14px; margin-top: 10px;"></p>
+
+            <div class="close-btn" onclick="closeReadingForm()">
+                <i class="fas fa-times"></i> BACK
+            </div>
+        </div>
+
+        <div id="bill-modal" class="overlay-panel">
+            <h2 style="color: #2196F3; margin-bottom: 15px;">Check Bill</h2>
+            <input type="text" id="cust-id-input" class="input-field" placeholder="Enter Unique ID">
+            <button onclick="fetchCustomerBill()" class="btn btn-view" style="width:60%; padding:12px; font-size:16px;">Search</button>
 
             <div id="bill-result-box" class="bill-details" style="display: none;">
                 <p><strong>Name:</strong> <span id="res-name"></span></p>
@@ -209,69 +244,105 @@
                 <p><strong>Pre-Balance:</strong> ₹<span id="res-prebal"></span></p>
                 <p><strong>Month:</strong> <span id="res-date"></span></p>
             </div>
-            
-            <p id="error-text" style="color: red; display: none; font-size: 14px; margin-top: 10px;">Invalid ID! Please try again.</p>
+            <p id="error-text" style="color: red; display: none; font-size: 14px;">Invalid ID! Try again.</p>
 
-            <div class="close-bill" onclick="closeBill()">
+            <div class="close-btn" onclick="closeBill()">
                 <i class="fas fa-times"></i> BACK
             </div>
         </div>
     </div>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('side-panel').classList.add('active');
-        }
-        function closeMenu() {
-            document.getElementById('side-panel').classList.remove('active');
-        }
-        function closeAll() {
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
+
+        function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }
+        function closeMenu() { document.getElementById('side-panel').classList.remove('active'); }
+        
+        function openReadingForm() { 
             closeMenu();
-            closeBill();
+            document.getElementById('reading-modal').style.display = 'flex'; 
+        }
+        function closeReadingForm() { 
+            document.getElementById('reading-modal').style.display = 'none';
+            document.getElementById('reading-status').innerText = '';
+            document.getElementById('reading-input').value = '';
         }
 
-        function openBill() {
-            document.getElementById('bill-modal').style.display = 'flex';
+        function openBill() { 
+            closeMenu();
+            document.getElementById('bill-modal').style.display = 'flex'; 
         }
-        
-        function closeBill() {
+        function closeBill() { 
             document.getElementById('bill-modal').style.display = 'none';
             document.getElementById('cust-id-input').value = '';
             document.getElementById('bill-result-box').style.display = 'none';
             document.getElementById('error-text').style.display = 'none';
         }
 
+        function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }
+
+        async function submitMeterReading() {
+            const name = document.getElementById('tenant-select').value;
+            const reading = document.getElementById('reading-input').value;
+            const status = document.getElementById('reading-status');
+            const btn = document.getElementById('submit-btn');
+
+            if (!reading) { alert("Please enter reading!"); return; }
+
+            status.innerText = "Saving Data...";
+            status.style.color = "orange";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        tenantName: name,
+        reading: reading
+    })
+});
+
+                if (response.ok) {
+                    status.innerText = "✅ Successfully Saved";
+                    status.style.color = "green";
+                    document.getElementById('reading-input').value = "";
+                } else {
+                    status.innerText = "❌ Error! Try again.";
+                    status.style.color = "red";
+                }
+            } catch (error) {
+                status.innerText = "❌ Connection Failed!";
+                status.style.color = "red";
+            }
+            btn.disabled = false;
+        }
+
         async function fetchCustomerBill() {
             const searchId = document.getElementById('cust-id-input').value.trim();
             const resultBox = document.getElementById('bill-result-box');
             const errorText = document.getElementById('error-text');
-
             if (!searchId) return;
 
             try {
-                // Ensure data.json exists in the same folder
                 const response = await fetch('data.json?t=' + new Date().getTime());
                 const users = await response.json();
-                
                 const user = users.find(u => u.id === searchId);
-
                 if (user) {
                     document.getElementById('res-name').innerText = user.customer_name;
                     document.getElementById('res-rent').innerText = user.Rent;
                     document.getElementById('res-bill').innerText = user.E_Bill;
                     document.getElementById('res-prebal').innerText = user.Pre_Balance;
                     document.getElementById('res-date').innerText = user.Billed_Month;
-                    
                     resultBox.style.display = 'block';
                     errorText.style.display = 'none';
                 } else {
                     resultBox.style.display = 'none';
                     errorText.style.display = 'block';
                 }
-            } catch (err) {
-                console.error("Fetch Error:", err);
-                alert("data.json not found or server error!");
-            }
+            } catch (err) { alert("data.json not found!"); }
         }
 
         function updateTime() {
