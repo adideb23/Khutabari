@@ -5,6 +5,7 @@
     "Rent": "1000",
     "E_Bill": "0",
     "Pre_Balance": "7000",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -15,6 +16,7 @@
     "Rent": "1000",
     "E_Bill": "0",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -25,6 +27,7 @@
     "Rent": "1000",
     "E_Bill": "180",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -35,6 +38,7 @@
     "Rent": "1000",
     "E_Bill": "570",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -45,6 +49,7 @@
     "Rent": "500",
     "E_Bill": "60",
     "Pre_Balance": "2115",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -55,6 +60,7 @@
     "Rent": "300",
     "E_Bill": "130",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -65,6 +71,7 @@
     "Rent": "800",
     "E_Bill": "30",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -75,6 +82,7 @@
     "Rent": "800",
     "E_Bill": "140",
     "Pre_Balance": "10",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -85,6 +93,7 @@
     "Rent": "800",
     "E_Bill": "230",
     "Pre_Balance": "5410",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -95,6 +104,7 @@
     "Rent": "700",
     "E_Bill": "10",
     "Pre_Balance": "2100",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -105,6 +115,7 @@
     "Rent": "700",
     "E_Bill": "0",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -115,6 +126,7 @@
     "Rent": "700",
     "E_Bill": "80",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -125,6 +137,7 @@
     "Rent": "700",
     "E_Bill": "340",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -135,6 +148,7 @@
     "Rent": "700",
     "E_Bill": "250",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -145,6 +159,7 @@
     "Rent": "1200",
     "E_Bill": "430",
     "Pre_Balance": "0",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -155,6 +170,7 @@
     "Rent": "600",
     "E_Bill": "40",
     "Pre_Balance": "1230",
+    "Total": "",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
