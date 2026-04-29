@@ -34,7 +34,7 @@
     "customer_name": "Hotel Kanchan",
     "Rent": "1000",
     "E_Bill": "570",
-    "Pre_Balance": "",
+    "Pre_Balance": "0",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
@@ -54,7 +54,7 @@
     "customer_name": "Kapil Khakhalary",
     "Rent": "300",
     "E_Bill": "130",
-    "Pre_Balance": "",
+    "Pre_Balance": "0",
     "Billed_Month": "March 2026",
     "": "",
     "false": ""
