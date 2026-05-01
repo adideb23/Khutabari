@@ -10,7 +10,7 @@
     "FALSE": ""
   },
   {
-    "id": "",
+    "id": "9101824962",
     "customer_name": "Sunanda Sutradhar",
     "Rent": "1000",
     "E_Bill": "30",
@@ -157,26 +157,6 @@
     "Pre_Balance": "1230",
     "Total": "1840",
     "Billed_Month": "April 2026",
-    "FALSE": ""
-  },
-  {
-    "id": "",
-    "customer_name": "",
-    "Rent": "",
-    "E_Bill": "",
-    "Pre_Balance": "",
-    "Total": "",
-    "Billed_Month": "",
-    "FALSE": ""
-  },
-  {
-    "id": "",
-    "customer_name": "9101824962",
-    "Rent": "",
-    "E_Bill": "",
-    "Pre_Balance": "",
-    "Total": "",
-    "Billed_Month": "",
     "FALSE": ""
   }
 ]
