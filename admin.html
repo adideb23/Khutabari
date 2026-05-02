@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Master Pro - KHUTABARI Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <script src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <style>
+        :root { --primary: #1a73e8; --secondary: #34a853; --dark: #202124; --danger: #d93025; --warning: #fbbc04; --accent: #444; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f3f4; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 1000px; background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; }
+        
+        /* Fixed Header with Logout */
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; position: relative; }
+        .exit-admin { position: absolute; right: 20px; top: 25px; cursor: pointer; font-weight: bold; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; font-size: 12px; transition: 0.3s; border: 1px solid white; }
+        .exit-admin:hover { background: white; color: var(--primary); }
+
+        .tab-box { display: flex; border-bottom: 1px solid #ddd; background: #fff; position: sticky; top: 0; z-index: 100; overflow-x: auto; }
+        .tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 11px; text-transform: uppercase; min-width: 100px; color: #555; }
+        .tab.active { border-bottom: 3px solid var(--primary); color: var(--primary); }
+        .content { padding: 15px; }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-card h4 { margin: 0; font-size: 10px; color: #666; text-transform: uppercase; }
+        .stat-card p { margin: 5px 0 0; font-size: 18px; font-weight: bold; color: var(--dark); }
+
+        .card { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-save { background: var(--primary); color: white; }
+        .btn-pay { background: var(--secondary); color: white; }
+        .btn-action { padding: 5px 8px; font-size: 10px; width: auto; margin: 2px; color: white; border-radius: 4px; border:none; }
+        .btn-edit { background: #ff9800; }
+        .btn-del { background: var(--danger); }
+        .btn-print { background: #607d8b; }
+        .btn-sync { background: #4285F4; color: white; font-size: 12px; padding: 8px; width: auto; margin: 0; }
+        
+        .table-wrapper { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 950px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f1f3f4; position: sticky; top: 0; }
+        .neg-bal { color: var(--danger); font-weight: bold; }
+        .hidden { display: none; }
+        
+        /* Receipt Styling */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .receipt-box { background: white; padding: 40px; width: 95%; max-width: 650px; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .receipt-header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .receipt-header h2 { margin: 0; font-size: 32px; letter-spacing: 2px; color: #000; }
+        .receipt-header p { margin: 8px 0 0; font-size: 18px; color: #444; }
+        .tenant-label { font-size: 16px; font-weight: bold; color: #888; text-transform: uppercase; margin-top: 20px; }
+        .tenant-name { font-size: 28px; font-weight: bold; color: #000; margin-bottom: 25px; }
+        .receipt-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .receipt-table th { text-align: left; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 15px 5px; color: #555; font-size: 18px; background: #fafafa; }
+        .receipt-table td { padding: 18px 5px; border-bottom: 1px solid #eee; font-size: 22px; color: #222; }
+        .receipt-total-row { font-weight: bold; color: #000; font-size: 26px; }
+        .receipt-footer { margin-top: 40px; text-align: center; font-size: 15px; color: #888; border-top: 1px solid #eee; padding-top: 10px; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #receiptModal, #receiptModal * { visibility: visible; }
+            #receiptModal { position: absolute; left: 0; top: 0; width: 100%; background: white; display: flex !important; }
+            .receipt-box { width: 100% !important; max-width: none !important; border: none !important; box-shadow: none !important; padding: 40px; }
+            .no-print { display: none !important; }
+            @page { margin: 1cm; }
+        }
+    </style>
+</head>
+<body onload="initApp()">
+
+<div class="app-container">
+    <div class="header">
+        <h2 style="margin:0;">Rent Master Pro Dashboard</h2>
+        <div id="syncStatus" style="font-size: 12px; margin-top: 5px;">Cloud Sync: <span id="statusTxt">Disconnected</span></div>
+        <span class="exit-admin" onclick="exitAdmin()">LOGOUT</span>
+    </div>
+
+    <div class="tab-box">
+        <div class="tab active" id="tab-overview" onclick="showSection('overview')">Overview</div>
+        <div class="tab" id="tab-history" onclick="showSection('history')">Tenant Ledger</div>
+        <div class="tab" id="tab-entry" onclick="showSection('entry')">Admin Entry</div>
+        <div class="tab" id="tab-manage" onclick="showSection('manage')">Manage Tenants</div>
+    </div>
+
+    <div id="overviewSection" class="content">
+        <div class="stats-bar">
+            <div class="stat-card"><h4>Active Tenants</h4><p id="statTenants">0</p></div>
+            <div class="stat-card" style="border-top: 3px solid var(--primary);"><h4>Recent Rent Total</h4><p id="statRent">₹0</p></div>
+            <div class="stat-card" style="border-top: 3px solid var(--warning);"><h4>Recent Elec. Total</h4><p id="statElec">₹0</p></div>
+            <div class="stat-card" style="border-top: 3px solid var(--danger);"><h4>Total Outstanding</h4><p id="statOut" style="color:var(--danger);">₹0</p></div>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Tenant Name</th><th>Latest Month</th><th>Bill Amt</th><th>Paid Today</th><th>Net Balance</th></tr></thead>
+                <tbody id="overviewBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="historySection" class="content hidden">
+        <label>Select Tenant</label>
+        <select id="histTenant" onchange="loadHistory()"></select>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>Month</th><th>Rent</th><th>Readings</th><th>Units</th><th>E-Bill</th><th>Prev. Bal</th><th>Total Bill</th><th>Paid Today</th><th>Remaining</th><th>Actions</th></tr></thead>
+                <tbody id="historyBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="entrySection" class="content hidden">
+        <div style="text-align:right; margin-bottom:10px;"><button id="loginBtn" class="btn-sync" onclick="handleAuth()">Login to Google Drive</button></div>
+        <div class="card" style="border-left: 5px solid var(--secondary);">
+            <label style="color:var(--secondary);">Quick Payment Update</label>
+            <select id="payTenant" onchange="showCurrentDues()"></select>
+            <div id="pendingInfo" style="font-size:12px; margin-bottom:10px; color:#666;">Select tenant...</div>
+            <div class="calc-grid">
+                <input type="number" id="quickPayAmt" placeholder="Amount (₹)">
+                <button class="btn-pay" onclick="updatePayment()">Update Payment</button>
+            </div>
+        </div>
+        <div class="card" style="border-left: 5px solid var(--primary);">
+            <label id="formTitle" style="color:var(--primary);">New Monthly Bill</label>
+            <select id="admTenant" onchange="autoFillPreviousData()"></select>
+            <div class="calc-grid">
+                <div><label>Month</label><input type="month" id="admMonth"></div>
+                <div><label>Rent (₹)</label><input type="number" id="admRent"></div>
+                <div><label>Init. Reading</label><input type="number" id="admInit"></div>
+                <div><label>Final Reading</label><input type="number" id="admFinal"></div>
+                <div><label>₹ / Unit</label><input type="number" id="admRate" value="8"></div>
+                <div><label>Prev. Bal (₹)</label><input type="number" id="admPrev" readonly style="background:#eee;"></div>
+                <div><label>Paid Today (₹)</label><input type="number" id="admPaid"></div>
+            </div>
+            <button class="btn-save" id="saveBtn" onclick="saveRecord()">Save</button>
+            <button class="btn-del hidden" id="cancelEditBtn" onclick="resetForm()" style="margin-top:10px;">Cancel Edit</button>
+        </div>
+    </div>
+
+    <div id="manageSection" class="content hidden">
+        <div class="card" style="border-left: 5px solid var(--secondary);">
+            <label style="color:var(--secondary);">Add New Tenant</label>
+            <div class="calc-grid">
+                <input type="text" id="newTenantName" placeholder="Full Name">
+                <input type="number" id="newTenantMobile" placeholder="Mobile (Their ID)">
+            </div>
+            <button class="btn-save" onclick="addTenant()">+ Add Tenant</button>
+        </div>
+
+        <div class="card" style="border-left: 5px solid var(--warning);">
+            <label style="color:#ff9800;">Edit Tenant Details</label>
+            <select id="editTenantSelect" onchange="loadTenantForEdit()"></select>
+            <div class="calc-grid">
+                <input type="text" id="editTenantName" placeholder="Corrected Name">
+                <input type="number" id="editTenantMobile" placeholder="Corrected Mobile">
+            </div>
+            <button class="btn-edit" style="color:white; background:#ff9800;" onclick="updateTenantDetails()">Update Tenant Info</button>
+        </div>
+
+        <div class="card" style="border-left: 5px solid var(--danger);">
+            <label style="color:var(--danger);">Remove Tenant</label>
+            <select id="deleteTenantList"></select>
+            <button class="btn-del" onclick="deleteTenant()" style="color:white;">Delete Tenant</button>
+        </div>
+    </div>
+</div>
+
+<div id="receiptModal" class="modal">
+    <div class="receipt-box" id="receiptToPrint">
+        <div class="receipt-header">
+            <h2>RENT RECEIPT</h2>
+            <p id="receiptDate"></p>
+        </div>
+        <div class="tenant-label">Tenant Name</div>
+        <div id="receiptTenantName" class="tenant-name"></div>
+        <table class="receipt-table">
+            <thead>
+                <tr><th style="width: 65%;">Description</th><th style="text-align:right; width: 35%;">Amount</th></tr>
+            </thead>
+            <tbody id="receiptItems"></tbody>
+        </table>
+        <div class="receipt-footer">Generated by KHUTABARI Portal</div>
+        <div class="no-print" style="margin-top:30px; display:flex; gap:15px; justify-content: center;">
+            <button onclick="window.print()" style="background:#333; color:white; width: auto; padding: 12px 25px; font-size: 16px;">Print Receipt</button>
+            <button onclick="closeReceipt()" style="background:#eee; color:#333; width: auto; padding: 12px 25px; font-size: 16px;">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CLIENT_ID = 'YOUR_CLIENT_ID_HERE';
+    const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+    
+    let tenantList = JSON.parse(localStorage.getItem('tenantList')) || ["Kanu Sutradhar", "Sunanda Sutradhar", "Dwipen sutradhar", "Hotel Kanchan", "Mahabbat Ali", "Kapil Khakhalary", "Prasenjit Khakhalary", "Anupam Sutradhar", "Mrinal Banai Boro", "Laba kumar Paul", "Sukur Banai", "Prahlad Basumatary", "Rajib Sutradhar", "Dimbeshwar Sutradhar", "Dhruba Banai", "Lalit Koch"];
+    let db = JSON.parse(localStorage.getItem('tenantDB')) || {};
+    let tenantMobileMap = JSON.parse(localStorage.getItem('tenantMobileMap')) || {};
+    let editState = { active: false, tenant: null, index: null };
+    let tokenClient, accessToken = null;
+
+    function initApp() { refreshDropdowns(); showSection('overview'); document.getElementById('admMonth').valueAsDate = new Date(); }
+
+    /* --- LOGOUT LOGIC --- */
+    function exitAdmin() {
+        window.location.href = 'index.html'; // Goes back to portal
+    }
+
+    function showSection(sec) {
+        ['overview', 'history', 'entry', 'manage'].forEach(s => document.getElementById(s + 'Section').classList.toggle('hidden', s !== sec));
+        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + sec));
+        if(sec === 'overview') loadOverview();
+        if(sec === 'history') loadHistory();
+    }
+
+    function refreshDropdowns() {
+        ['payTenant', 'admTenant', 'histTenant', 'deleteTenantList', 'editTenantSelect'].forEach(id => {
+            const el = document.getElementById(id); if(!el) return; el.innerHTML = "";
+            tenantList.sort().forEach(t => el.add(new Option(t, t)));
+        });
+    }
+
+    function loadOverview() {
+        const tbody = document.getElementById('overviewBody');
+        let tr=0, te=0, tout=0;
+        tbody.innerHTML = tenantList.sort().map(t => {
+            const last = (db[t] || []).slice(-1)[0];
+            if(last) { tr += parseFloat(last.rent); te += parseFloat(last.eBill); tout += parseFloat(last.remaining); }
+            return `<tr><td><strong>${t}</strong></td><td>${last?last.month:'-'}</td><td>₹${last?last.total:'0'}</td><td>₹${last?last.paidToday:'0'}</td><td class="${last&&last.remaining>0?'neg-bal':''}">${last?'₹'+last.remaining:'-'}</td></tr>`;
+        }).join('');
+        document.getElementById('statTenants').innerText = tenantList.length;
+        document.getElementById('statRent').innerText = '₹' + tr.toLocaleString();
+        document.getElementById('statElec').innerText = '₹' + te.toLocaleString();
+        document.getElementById('statOut').innerText = '₹' + tout.toLocaleString();
+    }
+
+    function saveRecord() {
+        const name = document.getElementById('admTenant').value;
+        const rent = parseFloat(document.getElementById('admRent').value) || 0;
+        const init = parseFloat(document.getElementById('admInit').value) || 0;
+        const final = parseFloat(document.getElementById('admFinal').value) || 0;
+        const rate = parseFloat(document.getElementById('admRate').value) || 8;
+        const prev = parseFloat(document.getElementById('admPrev').value) || 0;
+        const paid = parseFloat(document.getElementById('admPaid').value) || 0;
+        const units = final - init; const eBill = units * rate; const total = rent + eBill + prev;
+        const record = { month: document.getElementById('admMonth').value, rent, init, final, units, eBill, rate, prev, total, paidToday: paid, remaining: total - paid, date: new Date().toLocaleDateString() };
+        if(editState.active) { db[editState.tenant][editState.index] = record; }
+        else { if(db[name]) db[name].forEach(r => r.remaining = 0); if(!db[name]) db[name] = []; db[name].push(record); }
+        saveAndSync(); alert("Record Saved!"); resetForm();
+    }
+
+    function editEntry(name, index) {
+        const r = db[name][index];
+        editState = { active: true, tenant: name, index: index };
+        showSection('entry');
+        document.getElementById('formTitle').innerText = "Edit: " + name;
+        document.getElementById('saveBtn').innerText = "Update Bill";
+        document.getElementById('cancelEditBtn').classList.remove('hidden');
+        document.getElementById('admTenant').value = name;
+        document.getElementById('admMonth').value = r.month;
+        document.getElementById('admRent').value = r.rent;
+        document.getElementById('admInit').value = r.init;
+        document.getElementById('admFinal').value = r.final;
+        document.getElementById('admRate').value = r.rate || 8;
+        document.getElementById('admPrev').value = r.prev;
+        document.getElementById('admPaid').value = r.paidToday;
+    }
+
+    function deleteEntry(name, index) { if(confirm("Delete record?")) { db[name].splice(index, 1); saveAndSync(); loadHistory(); } }
+    function resetForm() { editState = { active: false }; document.getElementById('formTitle').innerText = "New Monthly Bill"; document.getElementById('saveBtn').innerText = "Save"; document.getElementById('cancelEditBtn').classList.add('hidden'); document.getElementById('admRent').value=""; document.getElementById('admInit').value=""; document.getElementById('admFinal').value=""; document.getElementById('admPaid').value=""; document.getElementById('admPrev').value="0"; }
+
+    function loadHistory() {
+        const name = document.getElementById('histTenant').value;
+        const history = db[name] || [];
+        document.getElementById('historyBody').innerHTML = history.map((r, i) => `
+            <tr><td>${r.month}</td><td>₹${r.rent}</td><td>${r.init}-${r.final}</td><td>${r.units}</td><td>₹${r.eBill}</td><td>₹${r.prev||0}</td><td>₹${r.total}</td><td>₹${r.paidToday}</td><td class="${r.remaining>0?'neg-bal':''}">₹${r.remaining}</td>
+            <td><button class="btn-action btn-print" onclick="generateReceipt('${name}', ${i})">Receipt</button><button class="btn-action btn-edit" onclick="editEntry('${name}', ${i})">Edit</button><button class="btn-action btn-del" onclick="deleteEntry('${name}', ${i})">Del</button></td></tr>`).join('') || "<tr><td colspan='10'>No Records</td></tr>";
+    }
+
+    function updatePayment() {
+        const name = document.getElementById('payTenant').value;
+        const amt = parseFloat(document.getElementById('quickPayAmt').value) || 0;
+        if(!db[name] || db[name].length === 0) return alert("No record found!");
+        let last = db[name][db[name].length - 1]; last.paidToday += amt; last.remaining = last.total - last.paidToday;
+        saveAndSync(); document.getElementById('quickPayAmt').value = ""; alert("Payment Updated!"); showCurrentDues();
+    }
+
+    function generateReceipt(name, index) {
+        const r = db[name][index]; if(!r) return;
+        document.getElementById('receiptDate').innerText = "Receipt Date: " + r.date;
+        document.getElementById('receiptTenantName').innerText = name;
+        document.getElementById('receiptItems').innerHTML = `
+            <tr><td>Room Rent (${r.month})</td><td style="text-align:right;">₹${r.rent}</td></tr>
+            <tr><td>Electricity (${r.units} units @ ₹${r.rate || 8})</td><td style="text-align:right;">₹${r.eBill}</td></tr>
+            <tr><td>Arrears / Previous Balance</td><td style="text-align:right;">₹${r.prev || 0}</td></tr>
+            <tr class="receipt-total-row"><td>Grand Total</td><td style="text-align:right;">₹${r.total}</td></tr>
+            <tr style="color:green; font-weight:bold;"><td>Amount Paid</td><td style="text-align:right;">₹${r.paidToday}</td></tr>
+            <tr style="color:red; font-weight:bold;"><td>Balance Due</td><td style="text-align:right;">₹${r.remaining}</td></tr>`;
+        document.getElementById('receiptModal').style.display = 'flex';
+    }
+
+    function addTenant() {
+        const n = document.getElementById('newTenantName').value.trim();
+        const m = document.getElementById('newTenantMobile').value.trim();
+        if(n && m) {
+            if(!tenantList.includes(n)) {
+                tenantList.push(n);
+                tenantMobileMap[m] = n;
+                saveAndSync(); refreshDropdowns();
+                document.getElementById('newTenantName').value=""; document.getElementById('newTenantMobile').value="";
+                alert("Tenant Added!");
+            } else { alert("Name already exists!"); }
+        } else { alert("Enter both Name and Mobile!"); }
+    }
+
+    function loadTenantForEdit() {
+        const name = document.getElementById('editTenantSelect').value;
+        document.getElementById('editTenantName').value = name;
+        let mob = Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === name) || "";
+        document.getElementById('editTenantMobile').value = mob;
+    }
+
+    function updateTenantDetails() {
+        const oldName = document.getElementById('editTenantSelect').value;
+        const newName = document.getElementById('editTenantName').value.trim();
+        const newMob = document.getElementById('editTenantMobile').value.trim();
+        if(!newName || !newMob) return alert("Fields cannot be empty!");
+        if(confirm("Confirm update?")) {
+            tenantList = tenantList.map(t => t === oldName ? newName : t);
+            if(oldName !== newName) { db[newName] = db[oldName]; delete db[oldName]; }
+            let oldMob = Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === oldName);
+            if(oldMob) delete tenantMobileMap[oldMob];
+            tenantMobileMap[newMob] = newName;
+            saveAndSync(); refreshDropdowns(); alert("Tenant Details Updated!");
+        }
+    }
+
+    function deleteTenant() {
+        const n = document.getElementById('deleteTenantList').value;
+        if(confirm("Delete tenant?")) {
+            tenantList = tenantList.filter(x => x !== n);
+            delete db[n];
+            let mob = Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === n);
+            if(mob) delete tenantMobileMap[mob];
+            saveAndSync(); refreshDropdowns(); alert("Deleted!");
+        }
+    }
+
+    function autoFillPreviousData() { const name = document.getElementById('admTenant').value; const last = (db[name] || []).slice(-1)[0]; document.getElementById('admPrev').value = last ? last.remaining : 0; document.getElementById('admInit').value = last ? last.final : 0; }
+    function saveAndSync() { localStorage.setItem('tenantDB', JSON.stringify(db)); localStorage.setItem('tenantList', JSON.stringify(tenantList)); localStorage.setItem('tenantMobileMap', JSON.stringify(tenantMobileMap)); if(accessToken) backupToDrive(); }
+    function closeReceipt() { document.getElementById('receiptModal').style.display='none'; }
+    function showCurrentDues() { const n = document.getElementById('payTenant').value; const last = (db[n]||[]).slice(-1)[0]; document.getElementById('pendingInfo').innerHTML = last ? `Current: ${last.month} | <b>Dues: ₹${last.remaining}</b>` : "No history."; }
+    function handleAuth() { tokenClient.requestAccessToken(); }
+    function gapiLoaded() { gapi.load('client', () => gapi.client.init({})); }
+    function gisLoaded() { tokenClient = google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPES, callback: (res) => { accessToken = res.access_token; document.getElementById('statusTxt').innerText = "Connected"; document.getElementById('loginBtn').classList.add('hidden'); } }); }
+    async function backupToDrive() { const file = new Blob([JSON.stringify({db, tenantList, tenantMobileMap})], {type: 'application/json'}); const form = new FormData(); form.append('metadata', new Blob([JSON.stringify({name: 'rent_master_data.json', mimeType: 'application/json'})], {type: 'application/json'})); form.append('file', file); try { await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', { method: 'POST', headers: { 'Authorization': 'Bearer ' + accessToken }, body: form }); document.getElementById('statusTxt').innerText = "Sync Done ✅"; } catch(e) {} }
+</script>
+</body>
+</html>
