@@ -55,87 +55,15 @@
         .pin-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; }
         
         @media print {
-    @page {
-        size: A4;
-        margin: 5mm;
-    }
-
-    html, body {
-        width: 210mm;
-        height: auto;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        background: #fff !important;
-    }
-
-    body > *:not(#receiptModal) {
-        display: none !important;
-    }
-
-    #receiptModal {
-        display: block !important;
-        position: static !important;
-        width: 100% !important;
-        height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: none !important;
-        overflow: visible !important;
-    }
-
-    #receiptToPrint {
-        width: 190mm !important;
-        max-width: 190mm !important;
-        margin: 0 auto !important;
-        padding: 10mm !important;
-        box-sizing: border-box !important;
-        border: none !important;
-        box-shadow: none !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-
-    #receiptToPrint .receipt-table {
-        width: 100% !important;
-        table-layout: fixed !important;
-        border-collapse: collapse !important;
-    }
-
-    #receiptToPrint .receipt-table td {
-        font-size: 16px !important;
-        padding: 10px 2px !important;
-        box-sizing: border-box !important;
-    }
-
-    #receiptToPrint .receipt-table td:first-child {
-        width: 68% !important;
-        overflow-wrap: break-word !important;
-    }
-
-    #receiptToPrint .receipt-table td:last-child {
-        width: 32% !important;
-        text-align: right !important;
-        white-space: nowrap !important;
-        padding-right: 15px !important;
-    }
-
-    .receipt-header h2 {
-        font-size: 28px !important;
-    }
-
-    .tenant-name {
-        font-size: 24px !important;
-    }
-
-    .total-row td {
-        font-size: 20px !important;
-    }
-
-    .no-print {
-        display: none !important;
-    }
-}
+            @page { size: A4; margin: 5mm; }
+            html, body { width: 210mm; height: auto; margin: 0 !important; padding: 0 !important; overflow: hidden !important; background: #fff !important; }
+            body > *:not(#receiptModal) { display: none !important; }
+            #receiptModal { display: block !important; position: static !important; width: 100% !important; height: auto !important; margin: 0 !important; padding: 0 !important; background: none !important; overflow: visible !important; }
+            #receiptToPrint { width: 190mm !important; max-width: 190mm !important; margin: 0 auto !important; padding: 10mm !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; }
+            #receiptToPrint .receipt-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; }
+            #receiptToPrint .receipt-table td { font-size: 16px !important; padding: 10px 2px !important; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 
@@ -230,10 +158,7 @@
     </div>
 
     <script>
-        // --- 1. ENTER READING SCRIPT URL (Don't Touch) ---
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
-        
-        // --- 2. VIEW BILL SCRIPT URL (New Sheet) ---
         const BILL_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzfclUwaRNXmUJitF86G1_VHzJmSh2VBHTSTMMCmV4lHSBXAKrqCUp4wyuHk2os0X0EQ/exec';
 
         function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }
@@ -257,13 +182,10 @@
             else if(pin.length === 4) { document.getElementById('admin-pin-error').style.display = 'block'; }
         }
 
-        /* --- UPDATED: LOGIN VIA BILL_SCRIPT_URL --- */
         async function loginTenant() {
             const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
             if (!mobileInput) return alert("Please enter mobile number");
-
             const loginBtn = document.querySelector('#bill-login-box .btn-view');
-            const errorText = document.getElementById('error-text');
             loginBtn.innerText = "Connecting...";
             loginBtn.disabled = true;
 
@@ -275,43 +197,40 @@
                 if (tenantRecords.length > 0) {
                     document.getElementById('bill-login-box').style.display = 'none';
                     document.getElementById('tenant-ledger-box').style.display = 'block';
-                    const tenantName = tenantRecords[0][1]; 
-                    document.getElementById('tenant-name-display').innerText = tenantName;
+                    document.getElementById('tenant-name-display').innerText = tenantRecords[0][1];
                     renderSheetLedger(tenantRecords.reverse());
                 } else {
-                    errorText.style.display = 'block';
-                    setTimeout(() => errorText.style.display = 'none', 3000);
+                    document.getElementById('error-text').style.display = 'block';
+                    setTimeout(() => document.getElementById('error-text').style.display = 'none', 3000);
                 }
-            } catch (e) {
-                console.error(e);
-                alert("Server Error! Bill URL check kijiye.");
-            } finally {
-                loginBtn.innerText = "Login";
-                loginBtn.disabled = false;
-            }
+            } catch (e) { alert("Server Error! URL check karein."); }
+            finally { loginBtn.innerText = "Login"; loginBtn.disabled = false; }
         }
 
         function renderSheetLedger(records) {
             const tbody = document.getElementById('ledger-body');
-            tbody.innerHTML = records.map((r, i) => `
-                <tr>
-                    <td>${r[3]}</td>
-                    <td>₹${r[4]}</td>
-                    <td style="color:${r[5] > 0 ? 'red' : 'green'}">₹${r[5]}</td>
-                    <td><button class="btn-rec" onclick='viewSheetReceipt(${JSON.stringify(r)})'>Receipt</button></td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = records.map((r) => {
+                // System timezone aware date building
+                const d = new Date(r[3]);
+                const monthStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+                return `<tr><td>${monthStr}</td><td>₹${r[4]}</td><td style="color:${r[5] > 0 ? 'red' : 'green'}">₹${r[5]}</td>
+                <td><button class="btn-rec" onclick='viewSheetReceipt(${JSON.stringify(r)})'>Receipt</button></td></tr>`;
+            }).join('');
         }
 
         function viewSheetReceipt(r) {
-            const receiptDate = new Date(r[6]);
-            const formattedDate = receiptDate.toLocaleDateString('en-GB');
-            document.getElementById('receiptDateStr').innerText = "Receipt Date: " + formattedDate;
+            // Fix 1: Receipt Date DD/MM/YYYY
+            const rd = new Date(r[6]);
+            const day = String(rd.getDate()).padStart(2, '0');
+            const month = String(rd.getMonth() + 1).padStart(2, '0');
+            const formattedReceiptDate = `${day}/${month}/${rd.getFullYear()}`;
+            document.getElementById('receiptDateStr').innerText = "Receipt Date: " + formattedReceiptDate;
+            
             document.getElementById('receiptTenantName').innerText = r[1];
 
-            // Specific Month formatting (Corrected for Timezone shift)
-            const d = new Date(r[3]);
-            const roomMonth = !isNaN(d) ? d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) : r[3];
+            // Fix 2: Room Rent Month (Corrects UTC shift issue)
+            const rm = new Date(r[3]);
+            const roomMonth = rm.getFullYear() + '-' + String(rm.getMonth() + 1).padStart(2, '0');
 
             document.getElementById('receiptItems').innerHTML = `
                 <tr><td style="width:65%;">Room Rent (${roomMonth})</td><td style="text-align:right; width:35%;">₹${r[7]}</td></tr>
@@ -319,23 +238,20 @@
                 <tr><td>Arrears / Previous Balance</td><td style="text-align:right; width:35%;">₹${r[11] || 0}</td></tr>
                 <tr class="total-row"><td>Grand Total</td><td style="text-align:right; width:35%;">₹${r[4]}</td></tr>
                 <tr style="color:green; font-weight:bold;"><td>Amount Paid</td><td style="text-align:right; width:35%;">₹${r[12]}</td></tr>
-                <tr style="color:red; font-weight:bold;"><td>Balance Due</td><td style="text-align:right; width:35%;">₹${r[5]}</td></tr>
-            `;
+                <tr style="color:red; font-weight:bold;"><td>Balance Due</td><td style="text-align:right; width:35%;">₹${r[5]}</td></tr>`;
             document.getElementById('receiptModal').style.display = 'flex';
         }
 
-        /* --- SUBMIT READING VIA READING_SCRIPT_URL (Unchanged) --- */
         async function submitMeterReading() {
             const name = document.getElementById('tenant-select').value;
             const reading = document.getElementById('reading-input').value;
-            const status = document.getElementById('reading-status');
             if (!name || !reading) return alert("Fill all fields");
-            status.innerText = "Submitting...";
+            document.getElementById('reading-status').innerText = "Submitting...";
             try {
                 await fetch(READING_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tenantName: name, reading: reading }) });
-                status.innerText = "🙏 Thank You";
+                document.getElementById('reading-status').innerText = "🙏 Thank You";
                 document.getElementById('reading-input').value = "";
-            } catch (e) { status.innerText = "Submitted ✅"; }
+            } catch (e) { document.getElementById('reading-status').innerText = "Submitted ✅"; }
         }
 
         function updateTime() {
