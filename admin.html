@@ -193,6 +193,7 @@
 </div>
 
 <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzfclUwaRNXmUJitF86G1_VHzJmSh2VBHTSTMMCmV4lHSBXAKrqCUp4wyuHk2os0X0EQ/exec'; // Yahan apna Google Apps Script URL dalein
     const CLIENT_ID = 'YOUR_CLIENT_ID_HERE';
     const SCOPES = 'https://www.googleapis.com/auth/drive.file';
     
@@ -237,7 +238,7 @@
         document.getElementById('statOut').innerText = '₹' + tout.toLocaleString();
     }
 
-    function saveRecord() {
+    async function saveRecord() {
         const name = document.getElementById('admTenant').value;
         const rent = parseFloat(document.getElementById('admRent').value) || 0;
         const init = parseFloat(document.getElementById('admInit').value) || 0;
@@ -247,9 +248,40 @@
         const paid = parseFloat(document.getElementById('admPaid').value) || 0;
         const units = final - init; const eBill = units * rate; const total = rent + eBill + prev;
         const record = { month: document.getElementById('admMonth').value, rent, init, final, units, eBill, rate, prev, total, paidToday: paid, remaining: total - paid, date: new Date().toLocaleDateString() };
+        
+        // Local Save logic
         if(editState.active) { db[editState.tenant][editState.index] = record; }
         else { if(db[name]) db[name].forEach(r => r.remaining = 0); if(!db[name]) db[name] = []; db[name].push(record); }
-        saveAndSync(); alert("Record Saved!"); resetForm();
+        
+        saveAndSync(); // Local and Drive sync
+        
+        // --- GOOGLE SHEET SYNC START ---
+        const syncData = {
+            name: name,
+            mobile: Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === name) || "",
+            month: record.month,
+            total: total,
+            remaining: record.remaining,
+            date: record.date,
+            rent: rent,
+            units: units,
+            rate: rate,
+            eBill: eBill,
+            prevBal: prev,
+            paidToday: paid
+        };
+
+        try {
+            document.getElementById('statusTxt').innerText = "Syncing...";
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(syncData) });
+            document.getElementById('statusTxt').innerText = "Sync Done ✅";
+        } catch (e) {
+            document.getElementById('statusTxt').innerText = "Sheet Sync Failed ❌";
+        }
+        // --- GOOGLE SHEET SYNC END ---
+
+        alert("Record Saved!"); 
+        resetForm();
     }
 
     function editEntry(name, index) {
@@ -280,12 +312,40 @@
             <td><button class="btn-action btn-print" onclick="generateReceipt('${name}', ${i})">Receipt</button><button class="btn-action btn-edit" onclick="editEntry('${name}', ${i})">Edit</button><button class="btn-action btn-del" onclick="deleteEntry('${name}', ${i})">Del</button></td></tr>`).join('') || "<tr><td colspan='10'>No Records</td></tr>";
     }
 
-    function updatePayment() {
+    async function updatePayment() {
         const name = document.getElementById('payTenant').value;
         const amt = parseFloat(document.getElementById('quickPayAmt').value) || 0;
         if(!db[name] || db[name].length === 0) return alert("No record found!");
         let last = db[name][db[name].length - 1]; last.paidToday += amt; last.remaining = last.total - last.paidToday;
-        saveAndSync(); document.getElementById('quickPayAmt').value = ""; alert("Payment Updated!"); showCurrentDues();
+        
+        saveAndSync();
+        
+        // --- GOOGLE SHEET SYNC START ---
+        const syncData = {
+            name: name,
+            mobile: Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === name) || "",
+            month: last.month,
+            total: last.total,
+            remaining: last.remaining,
+            date: last.date,
+            rent: last.rent,
+            units: last.units,
+            rate: last.rate,
+            eBill: last.eBill,
+            prevBal: last.prev,
+            paidToday: last.paidToday
+        };
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(syncData) });
+            alert("Payment Updated & Synced!");
+        } catch(e) {
+            alert("Payment Updated locally.");
+        }
+        // --- GOOGLE SHEET SYNC END ---
+
+        document.getElementById('quickPayAmt').value = ""; 
+        showCurrentDues();
     }
 
     function generateReceipt(name, index) {
