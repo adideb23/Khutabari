@@ -362,16 +362,38 @@
         document.getElementById('receiptModal').style.display = 'flex';
     }
 
-    function addTenant() {
+    async function addTenant() {
         const n = document.getElementById('newTenantName').value.trim();
         const m = document.getElementById('newTenantMobile').value.trim();
         if(n && m) {
             if(!tenantList.includes(n)) {
                 tenantList.push(n);
                 tenantMobileMap[m] = n;
-                saveAndSync(); refreshDropdowns();
-                document.getElementById('newTenantName').value=""; document.getElementById('newTenantMobile').value="";
-                alert("Tenant Added!");
+                
+                // Local & Drive Save
+                saveAndSync(); 
+                refreshDropdowns();
+
+                // --- GOOGLE SHEET SYNC (Registration) ---
+                const syncData = {
+                    name: n,
+                    mobile: m,
+                    month: "New Registration",
+                    total: 0,
+                    remaining: 0,
+                    date: new Date().toLocaleDateString(),
+                    rent: 0, units: 0, rate: 8, eBill: 0, prevBal: 0, paidToday: 0
+                };
+
+                try {
+                    await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(syncData) });
+                    alert("Tenant Added & Synced to Cloud!");
+                } catch(e) {
+                    alert("Added locally, but Sheet sync failed.");
+                }
+
+                document.getElementById('newTenantName').value=""; 
+                document.getElementById('newTenantMobile').value="";
             } else { alert("Name already exists!"); }
         } else { alert("Enter both Name and Mobile!"); }
     }
@@ -387,25 +409,37 @@
         const oldName = document.getElementById('editTenantSelect').value;
         const newName = document.getElementById('editTenantName').value.trim();
         const newMob = document.getElementById('editTenantMobile').value.trim();
+        
         if(!newName || !newMob) return alert("Fields cannot be empty!");
-        if(confirm("Confirm update?")) {
+        
+        if(confirm("Confirm update? This affects future bills.")) {
             tenantList = tenantList.map(t => t === oldName ? newName : t);
-            if(oldName !== newName) { db[newName] = db[oldName]; delete db[oldName]; }
+            if(oldName !== newName) {
+                db[newName] = db[oldName];
+                delete db[oldName];
+            }
             let oldMob = Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === oldName);
             if(oldMob) delete tenantMobileMap[oldMob];
             tenantMobileMap[newMob] = newName;
-            saveAndSync(); refreshDropdowns(); alert("Tenant Details Updated!");
+            
+            saveAndSync();
+            refreshDropdowns();
+            
+            alert("Local details updated! Future bills will use this info.");
         }
     }
 
     function deleteTenant() {
         const n = document.getElementById('deleteTenantList').value;
-        if(confirm("Delete tenant?")) {
+        if(confirm("Are you sure? This will remove the tenant from your Admin Dashboard.")) {
             tenantList = tenantList.filter(x => x !== n);
             delete db[n];
             let mob = Object.keys(tenantMobileMap).find(key => tenantMobileMap[key] === n);
             if(mob) delete tenantMobileMap[mob];
-            saveAndSync(); refreshDropdowns(); alert("Deleted!");
+            
+            saveAndSync();
+            refreshDropdowns();
+            alert("Tenant removed from Admin list.");
         }
     }
 
