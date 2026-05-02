@@ -26,7 +26,6 @@
         .btn { display: block; text-decoration: none; color: white; padding: 18px; margin-bottom: 15px; border-radius: 15px; font-size: 18px; font-weight: 700; width: 85%; border: none; cursor: pointer; }
         .btn-reading { background: linear-gradient(to right, #673ab7, #512da8); }
         .btn-view { background: linear-gradient(to right, #2196F3, #1976D2); }
-        .btn-admin { background: #2c3e50; }
         .btn-submit { background: #27ae60; padding: 12px; width: 60%; font-size: 16px; }
         .close-btn { margin-top: 20px; color: #e74c3c; font-weight: bold; cursor: pointer; font-size: 14px; }
         
@@ -50,10 +49,6 @@
         .total-row { font-weight: bold; color: #000; font-size: 26px !important; }
         .receipt-footer { margin-top: 40px; text-align: center; font-size: 15px; color: #888; border-top: 1px solid #eee; padding-top: 10px; }
 
-        /* PIN Modal */
-        .pin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
-        .pin-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; }
-        
         @media print {
             @page { size: A4; margin: 5mm; }
             html, body { width: 210mm; height: auto; margin: 0 !important; padding: 0 !important; overflow: hidden !important; background: #fff !important; }
@@ -88,7 +83,6 @@
                 <h2 style="color: #2c3e50; margin-bottom: 30px;">Menu Options</h2>
                 <button onclick="openReadingForm()" class="btn btn-reading">📝 Enter Reading</button>
                 <button onclick="openBill()" class="btn btn-view">📄 View Bill</button>
-                <button onclick="openAdminPin()" class="btn btn-admin">🔐 Admin Panel</button>
                 <div style="margin-top: 40px; color: #e74c3c; font-weight: bold; cursor: pointer;" onclick="closeMenu()">✖ CLOSE MENU</div>
             </div>
 
@@ -148,15 +142,6 @@
         </div>
     </div>
 
-    <div id="admin-pin-modal" class="pin-modal">
-        <div class="pin-box">
-            <h3>Admin Access</h3>
-            <input type="password" id="admin-pin" class="input-field" maxlength="4" inputmode="numeric" placeholder="Enter PIN" oninput="verifyAdminPin()" style="text-align:center;">
-            <p id="admin-pin-error" style="color:red; display:none;">Incorrect PIN</p>
-            <button onclick="closeAdminPin()" class="close-btn" style="border:none; background:none;">CANCEL</button>
-        </div>
-    </div>
-
     <script>
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
         const BILL_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzfclUwaRNXmUJitF86G1_VHzJmSh2VBHTSTMMCmV4lHSBXAKrqCUp4wyuHk2os0X0EQ/exec';
@@ -171,16 +156,8 @@
             document.getElementById('bill-login-box').style.display = 'block';
             document.getElementById('tenant-ledger-box').style.display = 'none';
         }
-        function openAdminPin() { closeMenu(); document.getElementById('admin-pin-modal').style.display = 'flex'; document.getElementById('admin-pin').focus(); }
-        function closeAdminPin() { document.getElementById('admin-pin-modal').style.display = 'none'; }
-        function closeAll() { closeMenu(); closeReadingForm(); closeBill(); closeAdminPin(); }
+        function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
-
-        function verifyAdminPin() {
-            const pin = document.getElementById('admin-pin').value;
-            if (pin === '7086') { window.location.href = 'admin.html'; } 
-            else if(pin.length === 4) { document.getElementById('admin-pin-error').style.display = 'block'; }
-        }
 
         async function loginTenant() {
             const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
@@ -210,7 +187,6 @@
         function renderSheetLedger(records) {
             const tbody = document.getElementById('ledger-body');
             tbody.innerHTML = records.map((r) => {
-                // System timezone aware date building
                 const d = new Date(r[3]);
                 const monthStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
                 return `<tr><td>${monthStr}</td><td>₹${r[4]}</td><td style="color:${r[5] > 0 ? 'red' : 'green'}">₹${r[5]}</td>
@@ -219,7 +195,6 @@
         }
 
         function viewSheetReceipt(r) {
-            // Fix 1: Receipt Date DD/MM/YYYY
             const rd = new Date(r[6]);
             const day = String(rd.getDate()).padStart(2, '0');
             const month = String(rd.getMonth() + 1).padStart(2, '0');
@@ -228,7 +203,6 @@
             
             document.getElementById('receiptTenantName').innerText = r[1];
 
-            // Fix 2: Room Rent Month (Corrects UTC shift issue)
             const rm = new Date(r[3]);
             const roomMonth = rm.getFullYear() + '-' + String(rm.getMonth() + 1).padStart(2, '0');
 
