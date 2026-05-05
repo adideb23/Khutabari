@@ -123,6 +123,7 @@
     <div id="ledgerSection" class="content hidden">
         <label style="font-weight:bold; margin-bottom:5px; display:block;">Select Tenant</label>
         <select id="histTenant" onchange="renderHistory()" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd;"></select>
+        <div style="font-size: 11px; color: #666; margin-bottom: 5px;">Showing Latest 12 Bills</div>
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>Month</th><th>Rent</th><th>Units</th><th>E-Bill</th><th>Prev</th><th>Total</th><th>Paid</th><th>Due</th><th>Action</th></tr></thead>
@@ -259,14 +260,22 @@
         document.getElementById('statOut').innerText = '₹' + tout.toLocaleString();
     }
 
+    // --- Ledger: Showing Latest 12 Bills ---
     function renderHistory() {
         const name = document.getElementById('histTenant').value;
-        const history = cloudData.db[name] || [];
-        document.getElementById('historyBody').innerHTML = history.map((r, i) => `
+        const fullHistory = cloudData.db[name] || [];
+        
+        // Slice latest 12 records
+        const latest12 = fullHistory.slice(-12);
+
+        document.getElementById('historyBody').innerHTML = latest12.map((r) => {
+            const originalIndex = fullHistory.indexOf(r); 
+            return `
             <tr>
                 <td>${r.month}</td><td>₹${r.rent}</td><td>${r.units}</td><td>₹${r.eBill}</td><td>₹${r.prev||0}</td><td>₹${r.total}</td><td>₹${r.paidToday}</td><td class="${r.remaining>0?'neg-bal':''}">₹${r.remaining}</td>
-                <td><button onclick="openReceipt('${name}', ${i})" style="padding:6px; cursor:pointer; background:var(--primary); color:white; border:none; border-radius:4px; font-size:10px;">Receipt</button></td>
-            </tr>`).reverse().join('');
+                <td><button onclick="openReceipt('${name}', ${originalIndex})" style="padding:6px; cursor:pointer; background:var(--primary); color:white; border:none; border-radius:4px; font-size:10px;">Receipt</button></td>
+            </tr>`;
+        }).reverse().join(''); // Reverse to show naya bill top par
     }
 
     function renderInfo() {
