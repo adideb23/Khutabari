@@ -142,7 +142,6 @@
     </div>
 
     <script>
-        // --- Updated URLs: Drive JSON for Billing ---
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
         const JSON_DRIVE_URL = 'https://script.google.com/macros/s/AKfycbxgoB6QcoWNquK4xRRyYMrK6TDf-JIdUAbHY6dkz6kUxWTP6CXcSTKVeMj0tewzn98/exec'; 
 
@@ -155,7 +154,6 @@
         function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
 
-        // --- New Drive-Based Login Logic ---
         async function loginTenant() {
             const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
             if (!mobileInput) return alert("Please enter mobile number");
@@ -163,7 +161,6 @@
             loginBtn.innerText = "Connecting..."; loginBtn.disabled = true;
 
             try {
-                // Fetching Master Data from Drive JSON
                 const res = await fetch(JSON_DRIVE_URL);
                 const masterData = await res.json();
                 const tenantName = masterData.tenantMobileMap[mobileInput];
@@ -173,7 +170,6 @@
                     document.getElementById('tenant-ledger-box').style.display = 'block';
                     document.getElementById('tenant-name-display').innerText = tenantName;
                     
-                    // Show only Latest 2 Bills
                     const history = masterData.db[tenantName].slice(-2).reverse();
                     renderDriveLedger(history, tenantName);
                 } else {
@@ -197,9 +193,13 @@
         }
 
         function viewDriveReceipt(r, name) {
-            document.getElementById('receiptDateStr').innerText = "Receipt Date: " + (r.date || "-");
+            // --- DIRECT DATE LOGIC: Displaying exact string from database ---
+            let formattedDate = r.date || "-"; 
+            
+            document.getElementById('receiptDateStr').innerText = "Receipt Date: " + formattedDate;
             document.getElementById('receiptTenantName').innerText = name;
 
+            // --- Receipt UI (UNTOUCHED ORIGINAL) ---
             document.getElementById('receiptItemsContainer').innerHTML = `
                 <div class="receipt-row"><div>Room Rent (${r.month})</div><div>₹${r.rent}</div></div>
                 <div class="receipt-row"><div>Electricity (${r.units} units @ ₹${r.rate || 10})</div><div>₹${r.eBill}</div></div>
@@ -211,7 +211,6 @@
             document.getElementById('receiptModal').style.display = 'flex';
         }
 
-        // --- Meter Reading Logic (Untouched/Sheet-based) ---
         async function submitMeterReading() {
             const name = document.getElementById('tenant-select').value;
             const reading = document.getElementById('reading-input').value;
