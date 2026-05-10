@@ -14,11 +14,7 @@
         * { box-sizing: border-box !important; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
         
-        /* --- PRINT MARGIN & BORDER FIX --- */
-        @page {
-            size: auto;
-            margin: 8mm; /* Safe space for the 4px border */
-        }
+        @page { size: auto; margin: 8mm; }
 
         #portal-view { display: flex; justify-content: center; align-items: center; width: 100%; }
         .dashboard-card { background: #ffffff; width: 90%; max-width: 400px; padding: 40px 25px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); text-align: center; position: relative; min-height: 400px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
@@ -39,16 +35,12 @@
         .ledger-table th { color: #888; font-size: 10px; text-transform: uppercase; }
         .btn-rec { background: var(--primary); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: none; cursor: pointer; }
 
-        /* --- STRETCHED PROFESSIONAL RECEIPT (SAFE HEIGHT FIX) --- */
+        /* --- PAY NOW BUTTON STYLE --- */
+        .btn-pay-small { background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; text-decoration: none; font-weight: bold; display: inline-block; text-align: center; border: none; }
+
+        /* --- RECEIPT STYLING (UNCHANGED) --- */
         .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: flex-start; overflow-y: auto; }
-        .receipt-box { 
-            background: #fff !important; width: 100%; max-width: 700px; margin: auto; padding: 40px; 
-            display: flex; flex-direction: column; text-align: left;
-            border: 4px solid #000; 
-            min-height: 80vh; /* Safe view height */
-            justify-content: space-between;
-            box-sizing: border-box;
-        }
+        .receipt-box { background: #fff !important; width: 100%; max-width: 700px; margin: auto; padding: 40px; display: flex; flex-direction: column; text-align: left; border: 4px solid #000; min-height: 80vh; justify-content: space-between; box-sizing: border-box; }
         .receipt-header { text-align: center; border-bottom: 3px solid #000; padding-bottom: 20px; }
         .receipt-header h2 { font-size: 42px; font-weight: 900; color: #000; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
         .tenant-section { text-align: center; margin: 30px 0; }
@@ -65,15 +57,7 @@
             body { background: #fff !important; padding: 0; margin: 0; }
             #portal-view, .no-print, .menu-arrow, .home-icon-btn { display: none !important; }
             .modal { position: absolute !important; display: block !important; background: #fff !important; padding: 0; width: 100%; height: auto; }
-            .receipt-box { 
-                width: 100% !important; max-width: none !important; 
-                border: 4px solid #000 !important; margin: 0 !important; padding: 45px !important; 
-                min-height: 82vh !important; /* Perfect height to avoid 2nd page break */
-                display: flex !important; flex-direction: column !important; 
-                justify-content: space-between !important; 
-                page-break-after: avoid; 
-                page-break-inside: avoid;
-            }
+            .receipt-box { width: 100% !important; max-width: none !important; border: 4px solid #000 !important; margin: 0 !important; padding: 45px !important; min-height: 82vh !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; page-break-after: avoid; page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -139,6 +123,7 @@
         </div>
     </div>
 
+    <!-- RECEIPT MODAL (UNCHANGED) -->
     <div id="receiptModal" class="modal">
         <div class="receipt-box">
             <div class="receipt-top-group">
@@ -202,12 +187,28 @@
             finally { loginBtn.innerText = "Login"; loginBtn.disabled = false; }
         }
 
+        // Updated Render Function to include Pay Now
         function renderCloudLedger(records, name) {
             const tbody = document.getElementById('ledger-body');
             if(records.length === 0) { tbody.innerHTML = '<tr><td colspan="4">No bills found.</td></tr>'; return; }
+            
             tbody.innerHTML = records.map((r) => {
-                return `<tr><td>${r.month}</td><td>₹${r.total}</td><td style="color:${r.remaining > 0 ? 'red' : 'green'}">₹${r.remaining}</td>
-                <td><button class="btn-rec" onclick='viewCloudReceipt(${JSON.stringify(r)}, "${name}")'>Receipt</button></td></tr>`;
+                const upiLink = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${r.remaining}&tn=Rent_${name.replace(/\s+/g, '_')}_${r.month}&cu=INR`;
+                const payAction = r.remaining > 0 
+                    ? `<a href="${upiLink}" class="btn-pay-small">Pay Now</a>` 
+                    : `<span style="color:#27ae60; font-weight:bold;">Paid</span>`;
+
+                return `<tr>
+                    <td>${r.month}</td>
+                    <td>₹${r.total}</td>
+                    <td style="color:${r.remaining > 0 ? 'red' : 'green'}">₹${r.remaining}</td>
+                    <td>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn-rec" onclick='viewCloudReceipt(${JSON.stringify(r)}, "${name}")'>Receipt</button>
+                            ${payAction}
+                        </div>
+                    </td>
+                </tr>`;
             }).join('');
         }
 
