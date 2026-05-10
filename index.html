@@ -35,8 +35,11 @@
         .ledger-table th { color: #888; font-size: 10px; text-transform: uppercase; }
         .btn-rec { background: var(--primary); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: none; cursor: pointer; }
 
-        /* --- PAY NOW BUTTON STYLE --- */
+        /* --- PAY NOW & QR STYLE --- */
         .btn-pay-small { background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; text-decoration: none; font-weight: bold; display: inline-block; text-align: center; border: none; }
+        .qr-icon { color: #000; font-size: 14px; cursor: pointer; vertical-align: middle; }
+        .qr-popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.3); z-index: 10001; text-align: center; }
+        .qr-popup img { width: 200px; height: 200px; margin-bottom: 10px; }
 
         /* --- RECEIPT STYLING (UNCHANGED) --- */
         .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: flex-start; overflow-y: auto; }
@@ -110,7 +113,7 @@
                 </div>
                 <div id="tenant-ledger-box" style="display:none; width:100%;">
                     <h3 id="tenant-name-display" style="margin:0; color:#333;"></h3>
-                    <div style="font-size: 10px; color: #888; margin-bottom: 5px;">Showing Latest 2 Bills</div>
+                    <div style="font-size: 10px; color: #888; margin-bottom: 5px;">Showing Latest Bill</div>
                     <div class="ledger-container">
                         <table class="ledger-table">
                             <thead><tr><th>Month</th><th>Total Bill</th><th>Remaining</th><th>Action</th></tr></thead>
@@ -121,6 +124,13 @@
                 <div class="close-btn" onclick="closeBill()">BACK</div>
             </div>
         </div>
+    </div>
+
+    <!-- QR POPUP -->
+    <div id="qrPopup" class="qr-popup">
+        <h3>Scan to Pay</h3>
+        <div id="qrContainer"></div>
+        <div class="close-btn" onclick="closeQR()">CLOSE</div>
     </div>
 
     <!-- RECEIPT MODAL (UNCHANGED) -->
@@ -173,7 +183,8 @@
                 const tenantSnap = await fs.collection("tenants").where("mobile", "==", mobileInput).get();
                 if (!tenantSnap.empty) {
                     const tenantName = tenantSnap.docs[0].data().name;
-                    const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(2).get();
+                    // Limit set to 1 to show only Latest Bill
+                    const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(1).get();
                     const history = billSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     document.getElementById('bill-login-box').style.display = 'none';
                     document.getElementById('tenant-ledger-box').style.display = 'block';
@@ -187,15 +198,16 @@
             finally { loginBtn.innerText = "Login"; loginBtn.disabled = false; }
         }
 
-        // Updated Render Function to include Pay Now
         function renderCloudLedger(records, name) {
             const tbody = document.getElementById('ledger-body');
             if(records.length === 0) { tbody.innerHTML = '<tr><td colspan="4">No bills found.</td></tr>'; return; }
             
             tbody.innerHTML = records.map((r) => {
-                const upiLink = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${r.remaining}&tn=Rent_${name.replace(/\s+/g, '_')}_${r.month}&cu=INR`;
+                const upiString = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${r.remaining}&tn=Rent_${name.replace(/\s+/g, '_')}_${r.month}&cu=INR`;
+                
                 const payAction = r.remaining > 0 
-                    ? `<a href="${upiLink}" class="btn-pay-small">Pay Now</a>` 
+                    ? `<a href="${upiString}" class="btn-pay-small">Pay Now</a>
+                       <i class="fas fa-qrcode qr-icon" onclick="showQR('${upiString}')" style="margin-left:5px;"></i>` 
                     : `<span style="color:#27ae60; font-weight:bold;">Paid</span>`;
 
                 return `<tr>
@@ -203,7 +215,7 @@
                     <td>₹${r.total}</td>
                     <td style="color:${r.remaining > 0 ? 'red' : 'green'}">₹${r.remaining}</td>
                     <td>
-                        <div style="display:flex; gap:4px;">
+                        <div style="display:flex; align-items:center; gap:4px;">
                             <button class="btn-rec" onclick='viewCloudReceipt(${JSON.stringify(r)}, "${name}")'>Receipt</button>
                             ${payAction}
                         </div>
@@ -211,6 +223,15 @@
                 </tr>`;
             }).join('');
         }
+
+        function showQR(upiData) {
+            const qrContainer = document.getElementById('qrContainer');
+            const encodedData = encodeURIComponent(upiData);
+            qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedData}" alt="UPI QR">`;
+            document.getElementById('qrPopup').style.display = 'block';
+        }
+
+        function closeQR() { document.getElementById('qrPopup').style.display = 'none'; }
 
         function viewCloudReceipt(r, name) {
             document.getElementById('receiptDateStr').innerText = "Date: " + (r.date || "-");
