@@ -172,7 +172,53 @@
         const fs = firebase.firestore();
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
 
-        function initPortal() { updateTime(); setInterval(updateTime, 1000); }
+        function initPortal() {
+
+    // Clock start
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    // Mobile Back Button Handle
+    window.history.pushState({}, '');
+
+    window.addEventListener('popstate', function () {
+
+        // Receipt close
+        if (document.getElementById('receiptModal').style.display === 'flex') {
+            closeReceipt();
+            window.history.pushState({}, '');
+            return;
+        }
+
+        // QR popup close
+        if (document.getElementById('qrPopup').style.display === 'block') {
+            closeQR();
+            window.history.pushState({}, '');
+            return;
+        }
+
+        // Bill modal close
+        if (document.getElementById('bill-modal').style.display === 'flex') {
+            closeBill();
+            window.history.pushState({}, '');
+            return;
+        }
+
+        // Reading modal close
+        if (document.getElementById('reading-modal').style.display === 'flex') {
+            closeReadingForm();
+            window.history.pushState({}, '');
+            return;
+        }
+
+        // Menu close
+        if (document.getElementById('side-panel').classList.contains('active')) {
+            closeMenu();
+            window.history.pushState({}, '');
+            return;
+        }
+    });
+}
 
         async function loginTenant() {
             const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
