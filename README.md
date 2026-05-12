@@ -10,7 +10,7 @@ A simple and efficient portal designed for tenants to submit their electricity r
 ## 🛠️ Tech Stack & Backend
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend & Database:** Powered by **Google Firebase** for secure, real-time data storage and authentication.
-- **Admin Management:** All data is managed and monitored via the **KHUTABARI ADMIN APK**.
+- **Admin Management:** All data is managed and monitored via the **KHUTABARI ADMIN APP**.
 - **Hosting:** Deployed on **GitHub Pages**.
 
 ## 🚀 How to Use
