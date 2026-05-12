@@ -19,4 +19,3 @@ A simple and efficient portal designed for tenants to submit their electricity r
 3. **To View Bill:** Enter your registered mobile number to log in and access your personalized billing dashboard.
 
 ---
-*Note: This portal is strictly for authorized tenants of Khutabari portal.*
