@@ -262,9 +262,44 @@
         function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }
         function closeMenu() { document.getElementById('side-panel').classList.remove('active'); }
         function openReadingForm() { closeMenu(); document.getElementById('reading-modal').style.display = 'flex'; }
-        function closeReadingForm() { document.getElementById('reading-modal').style.display = 'none'; }
+        function closeReadingForm() {
+
+    // form close
+    document.getElementById('reading-modal').style.display = 'none';
+
+    // tenant reset
+    document.getElementById('tenant-select').selectedIndex = 0;
+
+    // reading input reset
+    document.getElementById('reading-input').value = '';
+
+    // status text reset
+    document.getElementById('reading-status').innerText = '';
+
+    // portal menu reopen
+    document.getElementById('side-panel').classList.add('active');
+}
         function openBill() { closeMenu(); document.getElementById('bill-modal').style.display = 'flex'; }
-        function closeBill() { document.getElementById('bill-modal').style.display = 'none'; document.getElementById('bill-login-box').style.display = 'block'; document.getElementById('tenant-ledger-box').style.display = 'none'; }
+        function closeBill() {
+
+    // Bill form close
+    document.getElementById('bill-modal').style.display = 'none';
+
+    // Login screen wapas show
+    document.getElementById('bill-login-box').style.display = 'block';
+
+    // Ledger hide
+    document.getElementById('tenant-ledger-box').style.display = 'none';
+
+    // Mobile number clear
+    document.getElementById('tenant-mobile-input').value = '';
+
+    // Old bill table clear
+    document.getElementById('ledger-body').innerHTML = '';
+
+    // Portal menu dubara open
+    document.getElementById('side-panel').classList.add('active');
+}
         function closeAll() { closeMenu(); closeReadingForm(); closeBill(); }
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
         function updateTime() { const now = new Date(); const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }; document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options); }
