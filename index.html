@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KHUTABARI Portal</title>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a73e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KHUTABARI">
+<link rel="apple-touch-icon" href="icon-192.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
@@ -252,7 +259,9 @@
                 const upiString = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${r.remaining}&tn=Rent_${name.replace(/\s+/g, '_')}_${r.month}&cu=INR`;
                 
                 const payAction = r.remaining > 0 
-                    ? `<a href="${upiString}" class="btn-pay-small">Pay Now</a>
+                    ? `<a href="${upiString}" target="_blank" class="btn-pay-small">
+    Pay Now
+</a>
                        <i class="fas fa-qrcode qr-icon" onclick="showQR('${upiString}')" style="margin-left:5px;"></i>` 
                     : `<span style="color:#27ae60; font-weight:bold;">Paid</span>`;
 
@@ -350,5 +359,12 @@
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
         function updateTime() { const now = new Date(); const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }; document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options); }
     </script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js');
+    });
+  }
+</script>
 </body>
 </html>
