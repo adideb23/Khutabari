@@ -227,28 +227,72 @@
 }
 
         async function loginTenant() {
-            const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
-            if (!mobileInput) return alert("Please enter mobile number");
-            const loginBtn = document.querySelector('#bill-login-box .btn-view');
-            loginBtn.innerText = "Checking..."; loginBtn.disabled = true;
-            try {
-                const tenantSnap = await fs.collection("tenants").where("mobile", "==", mobileInput).get();
-                if (!tenantSnap.empty) {
-                    const tenantName = tenantSnap.docs[0].data().name;
-                    // Limit set to 1 to show only Latest Bill
-                    const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(1).get();
-                    const history = billSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    document.getElementById('bill-login-box').style.display = 'none';
-                    document.getElementById('tenant-ledger-box').style.display = 'block';
-                    document.getElementById('tenant-name-display').innerText = tenantName;
-                    renderCloudLedger(history, tenantName);
-                } else {
-                    document.getElementById('error-text').style.display = 'block';
-                    setTimeout(() => document.getElementById('error-text').style.display = 'none', 3000);
-                }
-            } catch (e) { alert("Cloud Sync Error!"); } 
-            finally { loginBtn.innerText = "Login"; loginBtn.disabled = false; }
+    const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
+    if (!mobileInput) return alert("Please enter mobile number");
+    
+    const loginBtn = document.querySelector('#bill-login-box .btn-view');
+    const errorText = document.getElementById('error-text');
+    
+    errorText.style.display = 'none';
+    errorText.style.color = 'red';
+
+    // 1. Agar basic internet hi band hai
+    if (!navigator.onLine) {
+        errorText.innerText = "Connection Error: Aapka Internet band hai!";
+        errorText.style.display = 'block';
+        return;
+    }
+
+    loginBtn.innerText = "Checking..."; 
+    loginBtn.disabled = true;
+
+    // 2. Slow network check karne ke liye timeout banayein (6 seconds)
+    let isTimeout = false;
+    const networkTimeout = setTimeout(() => {
+        isTimeout = true;
+        loginBtn.innerText = "Login"; 
+        loginBtn.disabled = false; 
+        errorText.innerText = "Connection Error: Network bohot slow hai!";
+        errorText.style.display = 'block';
+    }, 6000); // 6000ms = 6 seconds
+
+    try {
+        const tenantSnap = await fs.collection("tenants").where("mobile", "==", mobileInput).get();
+        
+        // Agar timeout pehle hi ho chuka hai, toh aage ka code rok do
+        if (isTimeout) return; 
+        clearTimeout(networkTimeout); // Net fast tha, toh timeout ko cancel karo
+
+        if (!tenantSnap.empty) {
+            const tenantName = tenantSnap.docs[0].data().name;
+            const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(1).get();
+            const history = billSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            document.getElementById('bill-login-box').style.display = 'none';
+            document.getElementById('tenant-ledger-box').style.display = 'block';
+            document.getElementById('tenant-name-display').innerText = tenantName;
+            renderCloudLedger(history, tenantName);
+        } else {
+            // Net fast hai par mobile number galat hai
+            errorText.innerText = "Mobile Number not found!";
+            errorText.style.display = 'block';
+            setTimeout(() => errorText.style.display = 'none', 4000);
         }
+    } catch (e) { 
+        if (isTimeout) return;
+        clearTimeout(networkTimeout);
+        console.error(e);
+        errorText.innerText = "Connection Error: Server se connect nahi ho paya!";
+        errorText.style.display = 'block';
+    } 
+    finally { 
+        if (!isTimeout) {
+            loginBtn.innerText = "Login"; 
+            loginBtn.disabled = false; 
+        }
+    }
+}
+
 
         function renderCloudLedger(records, name) {
             const tbody = document.getElementById('ledger-body');
