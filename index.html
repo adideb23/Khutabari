@@ -364,7 +364,7 @@
                 await fetch(READING_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tenantName: name, reading: reading }) });
                 document.getElementById('reading-status').innerText = "🙏 Thank You";
                 document.getElementById('reading-input').value = "";
-            } catch (e) { document.getElementById('reading-status').innerText = "Submitted ✅"; }
+            } catch (e) { document.getElementById('reading-status').innerText = "❌ Network Error"; }
         }
 
         function toggleMenu() { document.getElementById('side-panel').classList.add('active'); }
