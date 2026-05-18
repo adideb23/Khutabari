@@ -29,7 +29,25 @@
         :root { --primary: #1a73e8; --secondary: #34a853; --dark: #202124; --danger: #d93025; --warning: #fbbc04; }
         * {box-sizing: border-box !important;
     -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
+        body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.30)),
+        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 10px;
+}
         
         @page { size: auto; margin: 8mm; }
 
