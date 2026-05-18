@@ -438,7 +438,7 @@
     document.getElementById('ledger-body').innerHTML = '';
 }
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
-        function updateTime() { const now = new Date(); const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }; document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options); }
+        function updateTime() { const now = new Date(); const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }; document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options); }
     </script>
     <script>
   if ('serviceWorker' in navigator) {
