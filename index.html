@@ -185,6 +185,21 @@
             </div>
         </div>
     </div>
+        <div id="payOptionsModal" class="modal" style="z-index: 10005;">
+        <div class="dashboard-card" style="min-height: auto; padding: 30px 25px; width: 85%; max-width: 350px;">
+            <h2 style="margin-top:0; color: var(--primary);">Payment Options</h2>
+            <p style="font-size: 16px; margin-bottom: 20px;">Total Due: <b id="payModalDue" style="color: var(--danger); font-size: 20px;">₹0</b></p>
+            
+            <button id="btnPayFull" class="btn btn-view" style="width: 100%; margin-bottom: 15px;" onclick="processPayment('full')">Pay Full Amount</button>
+            
+            <div style="margin: 15px 0; color: #888; font-size: 12px; text-transform: uppercase; font-weight:bold;">-- OR PAY CUSTOM AMOUNT --</div>
+            
+            <input type="number" id="customPayAmt" class="input-field" placeholder="Enter Amount (₹)" style="margin-bottom: 10px; text-align: center; font-weight:bold;">
+            <button class="btn btn-submit" style="width: 100%; background: #ff9800;" onclick="processPayment('custom')">Pay Custom Amount</button>
+            
+            <div class="close-btn" onclick="closePayOptions()" style="margin-top:20px;">CANCEL</div>
+        </div>
+    </div>
 
     <!-- QR POPUP -->
     <div id="qrPopup" class="qr-popup">
@@ -232,53 +247,60 @@
         const fs = firebase.firestore();
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
 
-        function initPortal() {
+            function initPortal() {
+        // Clock start
+        updateTime();
+        setInterval(updateTime, 1000);
 
-    // Clock start
-    updateTime();
-    setInterval(updateTime, 1000);
+        // Mobile Back Button Handle
+        window.history.pushState({}, '');
 
-    // Mobile Back Button Handle
-    window.history.pushState({}, '');
+        window.addEventListener('popstate', function () {
+            
+            // 🔴 NAYA: Payment Options close (Isko sabse upar rakha hai taaki sabse pehle ye band ho)
+            if (document.getElementById('payOptionsModal') && document.getElementById('payOptionsModal').style.display === 'flex') {
+                closePayOptions();
+                window.history.pushState({}, '');
+                return;
+            }
 
-    window.addEventListener('popstate', function () {
+            // Receipt close
+            if (document.getElementById('receiptModal').style.display === 'flex') {
+                closeReceipt();
+                window.history.pushState({}, '');
+                return;
+            }
 
-        // Receipt close
-        if (document.getElementById('receiptModal').style.display === 'flex') {
-            closeReceipt();
-            window.history.pushState({}, '');
-            return;
-        }
+            // QR popup close
+            if (document.getElementById('qrPopup').style.display === 'block') {
+                closeQR();
+                window.history.pushState({}, '');
+                return;
+            }
 
-        // QR popup close
-        if (document.getElementById('qrPopup').style.display === 'block') {
-            closeQR();
-            window.history.pushState({}, '');
-            return;
-        }
+            // Bill modal close
+            if (document.getElementById('bill-modal').style.display === 'flex') {
+                closeBill();
+                window.history.pushState({}, '');
+                return;
+            }
 
-        // Bill modal close
-        if (document.getElementById('bill-modal').style.display === 'flex') {
-            closeBill();
-            window.history.pushState({}, '');
-            return;
-        }
+            // Reading modal close
+            if (document.getElementById('reading-modal').style.display === 'flex') {
+                closeReadingForm();
+                window.history.pushState({}, '');
+                return;
+            }
 
-        // Reading modal close
-        if (document.getElementById('reading-modal').style.display === 'flex') {
-            closeReadingForm();
-            window.history.pushState({}, '');
-            return;
-        }
+            // Menu close
+            if (document.getElementById('side-panel').classList.contains('active')) {
+                closeMenu();
+                window.history.pushState({}, '');
+                return;
+            }
+        });
+    }
 
-        // Menu close
-        if (document.getElementById('side-panel').classList.contains('active')) {
-            closeMenu();
-            window.history.pushState({}, '');
-            return;
-        }
-    });
-}
 
         async function loginTenant() {
     const mobileInput = document.getElementById('tenant-mobile-input').value.trim();
@@ -348,18 +370,16 @@
 }
 
 
+                let payContext = { name: '', month: '', due: 0, type: '' };
+
         function renderCloudLedger(records, name) {
             const tbody = document.getElementById('ledger-body');
             if(records.length === 0) { tbody.innerHTML = '<tr><td colspan="4">No bills found.</td></tr>'; return; }
             
             tbody.innerHTML = records.map((r) => {
-                const upiString = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${r.remaining}&tn=Rent_${name.replace(/\s+/g, '_')}_${r.month}&cu=INR`;
-                
                 const payAction = r.remaining > 0 
-                    ? `<a href="${upiString}" target="_blank" class="btn-pay-small">
-    Pay Now
-</a>
-                       <i class="fas fa-qrcode qr-icon" onclick="showQR('${upiString}')" style="margin-left:5px;"></i>` 
+                    ? `<button class="btn-pay-small" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'link')">Pay Now</button>
+                       <i class="fas fa-qrcode qr-icon" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'qr')" style="margin-left:5px;"></i>` 
                     : `<span style="color:#27ae60; font-weight:bold;">Paid</span>`;
 
                 return `<tr>
@@ -375,6 +395,41 @@
                 </tr>`;
             }).join('');
         }
+
+        function openPaymentOptions(name, month, due, type) {
+            payContext = { name, month, due, type };
+            document.getElementById('payModalDue').innerText = "₹" + due;
+            document.getElementById('btnPayFull').innerText = "Pay Full (₹" + due + ")";
+            document.getElementById('customPayAmt').value = "";
+            document.getElementById('payOptionsModal').style.display = 'flex';
+        }
+
+        function closePayOptions() {
+            document.getElementById('payOptionsModal').style.display = 'none';
+        }
+
+        function processPayment(mode) {
+            let amount = 0;
+            if (mode === 'full') {
+                amount = payContext.due;
+            } else {
+                amount = parseFloat(document.getElementById('customPayAmt').value);
+                if (!amount || amount <= 0 || amount > payContext.due) {
+                    return alert("Please enter a valid amount up to ₹" + payContext.due);
+                }
+            }
+
+            const upiString = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${amount}&tn=Rent_${payContext.name.replace(/\s+/g, '_')}_${payContext.month}&cu=INR`;
+
+            closePayOptions(); // Popup band karo
+
+            if (payContext.type === 'link') {
+                window.location.href = upiString; // Phone ke UPI apps open karega
+            } else if (payContext.type === 'qr') {
+                showQR(upiString); // QR code show karega
+            }
+        }
+
 
         function showQR(upiData) {
             const qrContainer = document.getElementById('qrContainer');
@@ -452,34 +507,35 @@
     // Portal menu dubara open
     document.getElementById('side-panel').classList.add('active');
 }
-        function closeAll() {
+                function closeAll() {
+            // Menu close
+            document.getElementById('side-panel').classList.remove('active');
+            // Reading modal close
+            document.getElementById('reading-modal').style.display = 'none';
+            // Bill modal close
+            document.getElementById('bill-modal').style.display = 'none';
+            // Receipt close
+            document.getElementById('receiptModal').style.display = 'none';
+            // QR close
+            document.getElementById('qrPopup').style.display = 'none';
+            
+            // 🔴 NAYA: Payment modal close
+            if(document.getElementById('payOptionsModal')) {
+                document.getElementById('payOptionsModal').style.display = 'none';
+            }
 
-    // Menu close
-    document.getElementById('side-panel').classList.remove('active');
+            // Reading form reset
+            document.getElementById('tenant-select').selectedIndex = 0;
+            document.getElementById('reading-input').value = '';
+            document.getElementById('reading-status').innerText = '';
 
-    // Reading modal close
-    document.getElementById('reading-modal').style.display = 'none';
+            // Bill form reset
+            document.getElementById('bill-login-box').style.display = 'block';
+            document.getElementById('tenant-ledger-box').style.display = 'none';
+            document.getElementById('tenant-mobile-input').value = '';
+            document.getElementById('ledger-body').innerHTML = '';
+        }
 
-    // Bill modal close
-    document.getElementById('bill-modal').style.display = 'none';
-
-    // Receipt close
-    document.getElementById('receiptModal').style.display = 'none';
-
-    // QR close
-    document.getElementById('qrPopup').style.display = 'none';
-
-    // Reading form reset
-    document.getElementById('tenant-select').selectedIndex = 0;
-    document.getElementById('reading-input').value = '';
-    document.getElementById('reading-status').innerText = '';
-
-    // Bill form reset
-    document.getElementById('bill-login-box').style.display = 'block';
-    document.getElementById('tenant-ledger-box').style.display = 'none';
-    document.getElementById('tenant-mobile-input').value = '';
-    document.getElementById('ledger-body').innerHTML = '';
-}
         function closeReceipt() { document.getElementById('receiptModal').style.display = 'none'; }
         function updateTime() { const now = new Date(); const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }; document.getElementById('clock-display').innerHTML = now.toLocaleDateString('en-IN', options); }
     </script>
