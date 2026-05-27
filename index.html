@@ -70,13 +70,11 @@
         .ledger-table th { color: #888; font-size: 10px; text-transform: uppercase; }
         .btn-rec { background: var(--primary); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; border: none; cursor: pointer; }
 
-        /* --- PAY NOW & QR STYLE --- */
         .btn-pay-small { background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; text-decoration: none; font-weight: bold; display: inline-block; text-align: center; border: none; }
         .qr-icon { color: #000; font-size: 14px; cursor: pointer; vertical-align: middle; }
         .qr-popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.3); z-index: 10001; text-align: center; }
         .qr-popup img { width: 200px; height: 200px; margin-bottom: 10px; }
 
-        /* --- RECEIPT STYLING (UNCHANGED) --- */
         .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: flex-start; overflow-y: auto; }
         .receipt-box { background: #fff !important; width: 100%; max-width: 700px; margin: auto; padding: 40px; display: flex; flex-direction: column; text-align: left; border: 4px solid #000; min-height: 80vh; justify-content: space-between; box-sizing: border-box; }
         .receipt-header { text-align: center; border-bottom: 3px solid #000; padding-bottom: 20px; }
@@ -202,14 +200,12 @@
         </div>
     </div>
 
-    <!-- QR POPUP -->
     <div id="qrPopup" class="qr-popup">
         <h3>Scan to Pay</h3>
         <div id="qrContainer"></div>
         <div class="close-btn" onclick="closeQR()">CLOSE</div>
     </div>
 
-    <!-- RECEIPT MODAL (UNCHANGED) -->
     <div id="receiptModal" class="modal">
         <div class="receipt-box">
             <div class="receipt-top-group">
@@ -249,51 +245,43 @@
         const READING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzO9KRFJkRZ0w8P5QZxMo6xn4LdqZW9KmqZYOdZ50ppk-sfTufKjY92I0cTnlz48/exec';
 
             function initPortal() {
-        // Clock start
         updateTime();
         setInterval(updateTime, 1000);
 
-        // Mobile Back Button Handle
         window.history.pushState({}, '');
 
         window.addEventListener('popstate', function () {
             
-            // 🔴 NAYA: Payment Options close (Isko sabse upar rakha hai taaki sabse pehle ye band ho)
             if (document.getElementById('payOptionsModal') && document.getElementById('payOptionsModal').style.display === 'flex') {
                 closePayOptions();
                 window.history.pushState({}, '');
                 return;
             }
 
-            // Receipt close
             if (document.getElementById('receiptModal').style.display === 'flex') {
                 closeReceipt();
                 window.history.pushState({}, '');
                 return;
             }
 
-            // QR popup close
             if (document.getElementById('qrPopup').style.display === 'block') {
                 closeQR();
                 window.history.pushState({}, '');
                 return;
             }
 
-            // Bill modal close
             if (document.getElementById('bill-modal').style.display === 'flex') {
                 closeBill();
                 window.history.pushState({}, '');
                 return;
             }
 
-            // Reading modal close
             if (document.getElementById('reading-modal').style.display === 'flex') {
                 closeReadingForm();
                 window.history.pushState({}, '');
                 return;
             }
 
-            // Menu close
             if (document.getElementById('side-panel').classList.contains('active')) {
                 closeMenu();
                 window.history.pushState({}, '');
@@ -313,7 +301,6 @@
     errorText.style.display = 'none';
     errorText.style.color = 'red';
 
-    // 1. Agar basic internet hi band hai
     if (!navigator.onLine) {
         errorText.innerText = "Connection Error: Aapka Internet band hai!";
         errorText.style.display = 'block';
@@ -323,7 +310,6 @@
     loginBtn.innerText = "Checking..."; 
     loginBtn.disabled = true;
 
-    // 2. Slow network check karne ke liye timeout banayein (6 seconds)
     let isTimeout = false;
     const networkTimeout = setTimeout(() => {
         isTimeout = true;
@@ -331,14 +317,13 @@
         loginBtn.disabled = false; 
         errorText.innerText = "Connection Error: Network bohot slow hai!";
         errorText.style.display = 'block';
-    }, 6000); // 6000ms = 6 seconds
+    }, 6000);
 
     try {
         const tenantSnap = await fs.collection("tenants").where("mobile", "==", mobileInput).get();
         
-        // Agar timeout pehle hi ho chuka hai, toh aage ka code rok do
         if (isTimeout) return; 
-        clearTimeout(networkTimeout); // Net fast tha, toh timeout ko cancel karo
+        clearTimeout(networkTimeout);
 
         if (!tenantSnap.empty) {
             const tenantName = tenantSnap.docs[0].data().name;
@@ -350,7 +335,6 @@
             document.getElementById('tenant-name-display').innerText = tenantName;
             renderCloudLedger(history, tenantName);
         } else {
-            // Net fast hai par mobile number galat hai
             errorText.innerText = "Mobile Number not found!";
             errorText.style.display = 'block';
             setTimeout(() => errorText.style.display = 'none', 4000);
@@ -422,12 +406,12 @@
 
             const upiString = `upi://pay?pa=adidevboro@sbi&pn=Adidev%20Boro&am=${amount}&tn=Rent_${payContext.name.replace(/\s+/g, '_')}_${payContext.month}&cu=INR`;
 
-            closePayOptions(); // Popup band karo
+            closePayOptions(); 
 
             if (payContext.type === 'link') {
-                window.location.href = upiString; // Phone ke UPI apps open karega
+                window.location.href = upiString; 
             } else if (payContext.type === 'qr') {
-                showQR(upiString); // QR code show karega
+                showQR(upiString); 
             }
         }
 
@@ -472,65 +456,46 @@
         function openReadingForm() { closeMenu(); document.getElementById('reading-modal').style.display = 'flex'; }
         function closeReadingForm() {
 
-    // form close
     document.getElementById('reading-modal').style.display = 'none';
 
-    // tenant reset
     document.getElementById('tenant-select').selectedIndex = 0;
 
-    // reading input reset
     document.getElementById('reading-input').value = '';
 
-    // status text reset
     document.getElementById('reading-status').innerText = '';
 
-    // portal menu reopen
     document.getElementById('side-panel').classList.add('active');
 }
         function openBill() { closeMenu(); document.getElementById('bill-modal').style.display = 'flex'; }
         function closeBill() {
 
-    // Bill form close
     document.getElementById('bill-modal').style.display = 'none';
 
-    // Login screen wapas show
     document.getElementById('bill-login-box').style.display = 'block';
 
-    // Ledger hide
     document.getElementById('tenant-ledger-box').style.display = 'none';
 
-    // Mobile number clear
     document.getElementById('tenant-mobile-input').value = '';
 
-    // Old bill table clear
     document.getElementById('ledger-body').innerHTML = '';
 
-    // Portal menu dubara open
     document.getElementById('side-panel').classList.add('active');
 }
                 function closeAll() {
-            // Menu close
             document.getElementById('side-panel').classList.remove('active');
-            // Reading modal close
             document.getElementById('reading-modal').style.display = 'none';
-            // Bill modal close
             document.getElementById('bill-modal').style.display = 'none';
-            // Receipt close
             document.getElementById('receiptModal').style.display = 'none';
-            // QR close
             document.getElementById('qrPopup').style.display = 'none';
             
-            // 🔴 NAYA: Payment modal close
             if(document.getElementById('payOptionsModal')) {
                 document.getElementById('payOptionsModal').style.display = 'none';
             }
 
-            // Reading form reset
             document.getElementById('tenant-select').selectedIndex = 0;
             document.getElementById('reading-input').value = '';
             document.getElementById('reading-status').innerText = '';
 
-            // Bill form reset
             document.getElementById('bill-login-box').style.display = 'block';
             document.getElementById('tenant-ledger-box').style.display = 'none';
             document.getElementById('tenant-mobile-input').value = '';
