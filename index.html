@@ -172,7 +172,7 @@
                 </div>
                 <div id="tenant-ledger-box" style="display:none; width:100%;">
                     <h3 id="tenant-name-display" style="margin:0; color:#333;"></h3>
-                    <div style="font-size: 10px; color: #888; margin-bottom: 5px;">Showing Latest Bill</div>
+                    <div style="font-size: 10px; color: #888; margin-bottom: 5px;">Showing Latest 2 Bill</div>
                     <div class="ledger-container">
                         <table class="ledger-table">
                             <thead><tr><th>Month</th><th>Total Bill</th><th>Remaining</th><th>Action</th></tr></thead>
@@ -327,7 +327,7 @@
 
         if (!tenantSnap.empty) {
             const tenantName = tenantSnap.docs[0].data().name;
-            const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(1).get();
+            const billSnap = await fs.collection("bills").where("tenantName", "==", tenantName).orderBy("month", "desc").limit(2).get();
             const history = billSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             
             document.getElementById('bill-login-box').style.display = 'none';
@@ -357,15 +357,24 @@
 
                 let payContext = { name: '', month: '', due: 0, type: '' };
 
-        function renderCloudLedger(records, name) {
+                function renderCloudLedger(records, name) {
             const tbody = document.getElementById('ledger-body');
             if(records.length === 0) { tbody.innerHTML = '<tr><td colspan="4">No bills found.</td></tr>'; return; }
             
-            tbody.innerHTML = records.map((r) => {
-                const payAction = r.remaining > 0 
-                    ? `<button class="btn-pay-small" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'link')">Pay Now</button>
-                       <i class="fas fa-qrcode qr-icon" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'qr')" style="margin-left:5px;"></i>` 
-                    : `<span style="color:#27ae60; font-weight:bold;">Paid</span>`;
+            tbody.innerHTML = records.map((r, index) => {
+                
+                let payAction = "";
+                
+                if (r.remaining > 0) {
+                    if (index === 0) {
+                        payAction = `<button class="btn-pay-small" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'link')">Pay Now</button>
+                                     <i class="fas fa-qrcode qr-icon" onclick="openPaymentOptions('${name}', '${r.month}', ${r.remaining}, 'qr')" style="margin-left:5px;"></i>`;
+                    } else {
+                        payAction = `<span style="color:#d93025; font-weight:bold; font-size: 11px;">Due</span>`;
+                    }
+                } else {
+                    payAction = `<span style="color:#27ae60; font-weight:bold; font-size: 11px;">Paid</span>`;
+                }
 
                 return `<tr>
                     <td>${r.month}</td>
@@ -380,6 +389,7 @@
                 </tr>`;
             }).join('');
         }
+
 
         function openPaymentOptions(name, month, due, type) {
             payContext = { name, month, due, type };
